@@ -15,8 +15,6 @@
 		9E7E4E80186D27A60050AFD1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E7E4E7E186D27A60050AFD1 /* InfoPlist.strings */; };
 		9E7E4E82186D27A60050AFD1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4E81186D27A60050AFD1 /* main.m */; };
 		9E7E4E86186D27A60050AFD1 /* SRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4E85186D27A60050AFD1 /* SRAppDelegate.m */; };
-		9E7E4E89186D27A60050AFD1 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7E4E87186D27A60050AFD1 /* Main_iPhone.storyboard */; };
-		9E7E4E8C186D27A60050AFD1 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7E4E8A186D27A60050AFD1 /* Main_iPad.storyboard */; };
 		9E7E4E8F186D27A60050AFD1 /* SRMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4E8E186D27A60050AFD1 /* SRMasterViewController.m */; };
 		9E7E4E92186D27A60050AFD1 /* SRDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4E91186D27A60050AFD1 /* SRDetailViewController.m */; };
 		9E7E4E94186D27A60050AFD1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E7E4E93186D27A60050AFD1 /* Images.xcassets */; };
@@ -53,8 +51,6 @@
 		9E7E4E83186D27A60050AFD1 /* Sorty-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sorty-Prefix.pch"; sourceTree = "<group>"; };
 		9E7E4E84186D27A60050AFD1 /* SRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRAppDelegate.h; sourceTree = "<group>"; };
 		9E7E4E85186D27A60050AFD1 /* SRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SRAppDelegate.m; sourceTree = "<group>"; };
-		9E7E4E88186D27A60050AFD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		9E7E4E8B186D27A60050AFD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		9E7E4E8D186D27A60050AFD1 /* SRMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRMasterViewController.h; sourceTree = "<group>"; };
 		9E7E4E8E186D27A60050AFD1 /* SRMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SRMasterViewController.m; sourceTree = "<group>"; };
 		9E7E4E90186D27A60050AFD1 /* SRDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRDetailViewController.h; sourceTree = "<group>"; };
@@ -133,8 +129,6 @@
 			children = (
 				9E7E4E84186D27A60050AFD1 /* SRAppDelegate.h */,
 				9E7E4E85186D27A60050AFD1 /* SRAppDelegate.m */,
-				9E7E4E87186D27A60050AFD1 /* Main_iPhone.storyboard */,
-				9E7E4E8A186D27A60050AFD1 /* Main_iPad.storyboard */,
 				9E7E4E8D186D27A60050AFD1 /* SRMasterViewController.h */,
 				9E7E4E8E186D27A60050AFD1 /* SRMasterViewController.m */,
 				9E7E4E90186D27A60050AFD1 /* SRDetailViewController.h */,
@@ -258,9 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7E4E8C186D27A60050AFD1 /* Main_iPad.storyboard in Resources */,
 				9E7E4E94186D27A60050AFD1 /* Images.xcassets in Resources */,
-				9E7E4E89186D27A60050AFD1 /* Main_iPhone.storyboard in Resources */,
 				9E7E4E80186D27A60050AFD1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,22 +306,6 @@
 				9E7E4E7F186D27A60050AFD1 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		9E7E4E87186D27A60050AFD1 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E7E4E88186D27A60050AFD1 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		9E7E4E8A186D27A60050AFD1 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E7E4E8B186D27A60050AFD1 /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		9E7E4EA3186D27A60050AFD1 /* InfoPlist.strings */ = {

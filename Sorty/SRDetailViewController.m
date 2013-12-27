@@ -12,7 +12,6 @@
 @synthesize detailItem;
 
 #pragma mark - managing the detail item
-
 -(void)setDetailItem:(NSString *)newDetailItem{
     if(detailItem != newDetailItem)
         detailItem = newDetailItem;
@@ -41,16 +40,16 @@
 }//end method
 
 -(void)viewWillAppear:(BOOL)animated{
-	SRSortingView *sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
+	sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
 	sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 	sortingView.towerColor = [UIColor purpleColor];
 	sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:sortingView];
 	
 	NSMutableArray *gen = [NSMutableArray new];
-	for(int i = 0, imax = 50; i < imax; i++)
+	for(int i = 0, imax = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]; i < imax; i++)
 		[gen addObject:@(arc4random() % imax)];
-	sortingView.delay = 1/gen.count;
+	sortingView.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"];
 	[sortingView sort:gen kind:detailItem];
 }
 
@@ -59,8 +58,9 @@
 		reveal = nil;
 		self.navigationController.navigationBar.hidden = NO;
 		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+			
 			CGRect downFrame = self.navigationController.navigationBar.frame;
-			downFrame.origin.y = [[UIApplication sharedApplication] statusBarFrame].size.height;
+			downFrame.origin.y = UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])?[[UIApplication sharedApplication] statusBarFrame].size.height:[[UIApplication sharedApplication] statusBarFrame].size.width;
 			[self.navigationController.navigationBar setFrame:downFrame];
 		} completion:nil];
 	}
@@ -75,7 +75,7 @@
 			self.navigationController.navigationBar.hidden = YES;
 			
 			reveal = [[UIButton alloc] initWithFrame:navigationBarFrame];
-			[reveal addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchUpInside];
+			[reveal addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchDown];
 			[self.view addSubview:reveal];
 		}];
 	}//end else
@@ -96,6 +96,20 @@
     // Called when the view is shown again in the split view, invalidating the button and popover controller.
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+	sortingView.soundsEnabled = NO;
+
+	if(self.navigationController.navigationBar.hidden){
+		reveal = nil;
+		self.navigationController.navigationBar.hidden = NO;
+		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+			CGRect downFrame = self.navigationController.navigationBar.frame;
+			downFrame.origin.y = [[UIApplication sharedApplication] statusBarFrame].size.height;
+			[self.navigationController.navigationBar setFrame:downFrame];
+		} completion:nil];
+	}//end if
 }
 
 @end

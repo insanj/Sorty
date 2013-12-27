@@ -9,11 +9,12 @@
 #import "SRSortingView.h"
 
 @implementation SRSortingView
-@synthesize towerColor, delay;
+@synthesize towerColor, delay, sortThread, soundsEnabled;
 
 -(SRSortingView *)initWithFrame:(CGRect)frame{
     if((self = [super initWithFrame:frame])){
 		towerColor = [UIColor blackColor];
+		soundsEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"];
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 	}
@@ -41,15 +42,14 @@
 		[self addSubview:towers[i]];
 	}
 	
-	if([name isEqualToString:@"Bubble Sort"])
-		[NSThread detachNewThreadSelector:@selector(bubbleSort) toTarget:self withObject:nil];
+	if([name isEqualToString:@"Bubble Sort"]){
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bubbleSort) object:nil];
+		[sortThread start];
+	}
 }//end if
 
 -(void)bubbleSort{
-	
 	BOOL swapped = YES;
-	
-	@autoreleasepool {
 	while(swapped){
 		swapped = NO;
 
@@ -87,17 +87,18 @@
 				});
 			}//end if
 		}//end for
-	}
 	}//end while
 }//end method
 
 -(void)playSum:(CGFloat)freq{
-	TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * 10) amplitude:1];
-	[gen playForDuration:1];
+	if(soundsEnabled){
+		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * 10) amplitude:2];
+		[gen playForDuration:delay * 10];
 	
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
-		gen = nil;
-	});
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
+			gen = nil;
+		});
+	}
 }
 
 -(void)updateTowers{

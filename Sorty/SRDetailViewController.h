@@ -11,6 +11,7 @@
 
 @interface SRDetailViewController : UIViewController <UISplitViewControllerDelegate>{
 	UIButton *reveal;
+	SRSortingView *sortingView;
 }
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;

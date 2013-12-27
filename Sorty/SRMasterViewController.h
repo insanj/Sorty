@@ -10,7 +10,7 @@
 #import "SRDetailViewController.h"
 
 @class SRDetailViewController;
-@interface SRMasterViewController : UITableViewController{
+@interface SRMasterViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>{
 	NSMutableArray *objects;
 }
 

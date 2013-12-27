@@ -10,14 +10,11 @@
 
 @implementation SRAppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-	    UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-	    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-	    splitViewController.delegate = (id)navigationController.topViewController;
-	}
+-(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:[[SRMasterViewController alloc] init]];
+    self.window.rootViewController = self.navigationController;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 							

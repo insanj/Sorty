@@ -11,12 +11,15 @@
 
 @interface SRSortingView : UIView {
 	NSMutableArray *array, *towers;
-	NSThread *sortThread;
 	NSInteger minVal, maxVal;
+	
 }
 
 @property (nonatomic, retain) UIColor *towerColor;
 @property (nonatomic, readwrite) NSTimeInterval delay;
+@property (nonatomic, readwrite) BOOL soundsEnabled;
+
+@property (nonatomic, retain) NSThread *sortThread;
 
 -(void)sort:(NSArray *)given kind:(NSString *)kind;
 @end
