@@ -43,52 +43,47 @@
 	}
 	
 	if([name isEqualToString:@"Bubble Sort"])
-		[NSThread detachNewThreadSelector:@selector(bubbleSort) toTarget:self withObject:nil];
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			BOOL swapped = YES;
+			while(swapped){
+				swapped = NO;
+				for(int i = 1; i < array.count; i++){
+					UIView *firstTower = towers[i-1];
+					UIView *secondTower = towers[i];
+					
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+						[firstTower setBackgroundColor:[UIColor greenColor]];
+						[secondTower setBackgroundColor:[UIColor greenColor]];
+					});
+					
+					if(array[i-1] > array[i]){
+						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+							[firstTower setBackgroundColor:[UIColor redColor]];
+							[secondTower setBackgroundColor:[UIColor redColor]];
+							
+							CGRect firstFrame = firstTower.frame;
+							[firstTower setFrame:secondTower.frame];
+							[secondTower setFrame:firstFrame];
+							
+							
+							[towers setObject:firstTower atIndexedSubscript:i];
+							[towers setObject:secondTower atIndexedSubscript:i-1];
+						});
+						
+						NSObject *first = array[i];
+						[array setObject:array[i-1] atIndexedSubscript:i];
+						[array setObject:first atIndexedSubscript:(i-1)];
+						swapped = YES;
+						
+						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+							[firstTower setBackgroundColor:towerColor];
+							[secondTower setBackgroundColor:towerColor];
+						});
+					}//end if
+				}//end for
+			}//end while
+		});
 }//end if
-
--(void)bubbleSort{
-	BOOL swapped = YES;
-	while(swapped){
-		swapped = NO;
-		for(int i = 1; i < array.count; i++){
-			UIView *firstTower = towers[i-1];
-			UIView *secondTower = towers[i];
-			
-			[NSThread sleepForTimeInterval:delay];
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[firstTower setBackgroundColor:[UIColor greenColor]];
-				[secondTower setBackgroundColor:[UIColor greenColor]];
-			});
-
-			if(array[i-1] > array[i]){
-				[NSThread sleepForTimeInterval:delay];
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					[firstTower setBackgroundColor:[UIColor redColor]];
-					[secondTower setBackgroundColor:[UIColor redColor]];
-					
-					CGRect firstFrame = firstTower.frame;
-					[firstTower setFrame:secondTower.frame];
-					[secondTower setFrame:firstFrame];
-
-					
-					[towers setObject:firstTower atIndexedSubscript:i];
-					[towers setObject:secondTower atIndexedSubscript:i-1];
-				});
-				
-				NSObject *first = array[i];
-				[array setObject:array[i-1] atIndexedSubscript:i];
-				[array setObject:first atIndexedSubscript:(i-1)];
-				swapped = YES;
-				
-				[NSThread sleepForTimeInterval:delay];
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					[firstTower setBackgroundColor:towerColor];
-					[secondTower setBackgroundColor:towerColor];
-				});
-			}//end if
-		}//end for
-	}//end while
-}//end method
 
 -(void)swapFrames:(NSArray *)object{
 	UIView *first = object[0];
