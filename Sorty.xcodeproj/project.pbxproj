@@ -24,6 +24,8 @@
 		9E7E4EA5186D27A60050AFD1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E7E4EA3186D27A60050AFD1 /* InfoPlist.strings */; };
 		9E7E4EA7186D27A60050AFD1 /* SortyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4EA6186D27A60050AFD1 /* SortyTests.m */; };
 		9E7E4EB5186D414F0050AFD1 /* SRSortingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4EB4186D414F0050AFD1 /* SRSortingView.m */; };
+		9E7E4EB8186D897D0050AFD1 /* SRAudioGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4EB7186D897D0050AFD1 /* SRAudioGenerator.m */; };
+		9E7E4EBA186D89B10050AFD1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7E4EB9186D89B10050AFD1 /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,9 @@
 		9E7E4EA6186D27A60050AFD1 /* SortyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SortyTests.m; sourceTree = "<group>"; };
 		9E7E4EB3186D414F0050AFD1 /* SRSortingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSortingView.h; sourceTree = "<group>"; };
 		9E7E4EB4186D414F0050AFD1 /* SRSortingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSortingView.m; sourceTree = "<group>"; };
+		9E7E4EB6186D897D0050AFD1 /* SRAudioGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioGenerator.h; sourceTree = "<group>"; };
+		9E7E4EB7186D897D0050AFD1 /* SRAudioGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioGenerator.m; sourceTree = "<group>"; };
+		9E7E4EB9186D89B10050AFD1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7E4EBA186D89B10050AFD1 /* AudioToolbox.framework in Frameworks */,
 				9E7E4E78186D27A60050AFD1 /* CoreGraphics.framework in Frameworks */,
 				9E7E4E7A186D27A60050AFD1 /* UIKit.framework in Frameworks */,
 				9E7E4E76186D27A60050AFD1 /* Foundation.framework in Frameworks */,
@@ -109,6 +115,7 @@
 		9E7E4E74186D27A60050AFD1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E7E4EB9186D89B10050AFD1 /* AudioToolbox.framework */,
 				9E7E4E75186D27A60050AFD1 /* Foundation.framework */,
 				9E7E4E77186D27A60050AFD1 /* CoreGraphics.framework */,
 				9E7E4E79186D27A60050AFD1 /* UIKit.framework */,
@@ -130,6 +137,8 @@
 				9E7E4E91186D27A60050AFD1 /* SRDetailViewController.m */,
 				9E7E4EB3186D414F0050AFD1 /* SRSortingView.h */,
 				9E7E4EB4186D414F0050AFD1 /* SRSortingView.m */,
+				9E7E4EB6186D897D0050AFD1 /* SRAudioGenerator.h */,
+				9E7E4EB7186D897D0050AFD1 /* SRAudioGenerator.m */,
 				9E7E4E93186D27A60050AFD1 /* Images.xcassets */,
 				9E7E4E7C186D27A60050AFD1 /* Supporting Files */,
 			);
@@ -270,6 +279,7 @@
 				9E7E4E8F186D27A60050AFD1 /* SRMasterViewController.m in Sources */,
 				9E7E4E82186D27A60050AFD1 /* main.m in Sources */,
 				9E7E4EB5186D414F0050AFD1 /* SRSortingView.m in Sources */,
+				9E7E4EB8186D897D0050AFD1 /* SRAudioGenerator.m in Sources */,
 				9E7E4E92186D27A60050AFD1 /* SRDetailViewController.m in Sources */,
 				9E7E4E86186D27A60050AFD1 /* SRAppDelegate.m in Sources */,
 			);
