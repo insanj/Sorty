@@ -44,10 +44,14 @@
 	SRSortingView *sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
 	sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 	sortingView.towerColor = [UIColor purpleColor];
-	sortingView.delay = 1;
 	sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:sortingView];
-	[sortingView sort:@[@5, @1, @7, @9, @1, @3, @2, @10, @11] kind:detailItem];
+	
+	NSMutableArray *gen = [NSMutableArray new];
+	for(int i = 0, imax = 150; i < imax; i++)
+		[gen addObject:@(arc4random() % imax)];
+	sortingView.delay = 1/gen.count;
+	[sortingView sort:gen kind:detailItem];
 }
 
 -(void)revealBar{
