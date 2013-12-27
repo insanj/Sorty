@@ -13,7 +13,7 @@
 
 -(SRSortingView *)initWithFrame:(CGRect)frame{
     if((self = [super initWithFrame:frame])){
-        towerColor = [UIColor blackColor];
+		towerColor = [UIColor blackColor];
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 	}
@@ -68,13 +68,13 @@
 }//end method
 
 
-- (void)deviceOrientationDidChange:(NSNotification *)notification {
+-(void)deviceOrientationDidChange:(NSNotification *)notification{
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 	NSLog(@"rotated to: %d", orientation);
 }
 
 -(void)dealloc{
-	[[NSNotificationCenter defaultCenter] removeObserver: self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
 
