@@ -38,15 +38,17 @@
 		[titleButton addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchUpInside];
 		self.navigationItem.titleView = titleButton;
 	}
-	
+}//end method
+
+-(void)viewDidAppear:(BOOL)animated{
 	SRSortingView *sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
 	sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
-	sortingView.towerColor = [UIColor darkGrayColor];
+	sortingView.towerColor = [UIColor purpleColor];
 	sortingView.delay = 0.01;
 	sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:sortingView];
 	[sortingView sort:@[@5, @1, @7, @9, @0, @3, @2, @10, @11] kind:detailItem];
-}//end method
+}
 
 -(void)revealBar{
 	if(self.navigationController.navigationBar.hidden){
