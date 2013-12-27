@@ -23,14 +23,13 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+
 	if(!detailItem)
 		detailItem = @"Bubble Sort";
 	
 	if([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad){
 		UINavigationBar *navigationBar = self.navigationController.navigationBar;
-		CGRect titleBarFrame = [detailItem boundingRectWithSize:navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
-		titleBarFrame.origin.y = [[UIApplication sharedApplication] statusBarFrame].size.height * 2;
-		
+		CGRect titleBarFrame = [detailItem boundingRectWithSize:navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];		
 		UIButton *titleButton = [[UIButton alloc] initWithFrame:titleBarFrame];
 		titleButton.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
 		[titleButton setTitle:detailItem forState:UIControlStateNormal];
@@ -44,6 +43,7 @@
 	sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 	sortingView.towerColor = [UIColor darkGrayColor];
 	sortingView.delay = 0.01;
+	sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:sortingView];
 	[sortingView sort:@[@5, @1, @7, @9, @0, @3, @2, @10, @11] kind:detailItem];
 }//end method

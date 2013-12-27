@@ -492,6 +492,7 @@
 				9E7E4EAC186D27A60050AFD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9E7E4EAD186D27A60050AFD1 /* Build configuration list for PBXNativeTarget "SortyTests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +501,7 @@
 				9E7E4EAF186D27A60050AFD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -24,8 +24,14 @@
 	objects = @[@"Bubble Sort", @"Insertion Sort", @"Selection Sort"].mutableCopy;
 	
     [super viewDidLoad];
-	
-	self.navigationItem.title = @"Sorty";
+	CGRect titleBarFrame = [@"Sorty" boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
+	UIButton *title = [[UIButton alloc] initWithFrame:titleBarFrame];
+	title.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
+	[title setTitle:@"Sorty" forState:UIControlStateNormal];
+	[title setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	self.navigationItem.titleView = title;
+	self.title = @"";
+
 	self.detailViewController = (SRDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 	self.tableView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 }//end method
@@ -87,6 +93,7 @@
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSString *object = objects[indexPath.row];
+		
         [[segue destinationViewController] setDetailItem:object];
     }
 }//end method
