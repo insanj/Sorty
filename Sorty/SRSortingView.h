@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TGSineWaveToneGenerator.h"
 
 @interface SRSortingView : UIView {
 	NSMutableArray *array, *towers;

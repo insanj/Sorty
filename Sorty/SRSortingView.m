@@ -46,11 +46,14 @@
 }//end if
 
 -(void)bubbleSort{
+	
 	BOOL swapped = YES;
+	
+	@autoreleasepool {
 	while(swapped){
 		swapped = NO;
-		for(int i = 1; i < array.count; i++){
 
+		for(int i = 1; i < array.count; i++){
 			UIView *firstTower = towers[i-1];
 			UIView *secondTower = towers[i];
 					
@@ -60,9 +63,10 @@
 				[secondTower setBackgroundColor:[UIColor greenColor]];
 			});
 			
+
 			if([array[i-1] intValue] > [array[i] intValue]){
 				swapped = YES;
-
+				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
 					[firstTower setBackgroundColor:[UIColor redColor]];
@@ -73,6 +77,7 @@
 				});
 				
 				[array exchangeObjectAtIndex:i-1 withObjectAtIndex:i];
+				[self playSum:([array[i-1] intValue] + [array[i] intValue])];
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
@@ -82,8 +87,18 @@
 				});
 			}//end if
 		}//end for
+	}
 	}//end while
 }//end method
+
+-(void)playSum:(CGFloat)freq{
+	TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * 10) amplitude:1];
+	[gen playForDuration:1];
+	
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
+		gen = nil;
+	});
+}
 
 -(void)updateTowers{
 	for(int i = 0; i < array.count; i++){
