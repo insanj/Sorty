@@ -38,6 +38,7 @@
 		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (self.frame.size.width / array.count)), self.frame.size.height - height, ceilf(self.frame.size.width / array.count), height)];
 		tower.backgroundColor = towerColor;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		tower.tag = i;
 		[towers addObject:tower];
 		[self addSubview:towers[i]];
 	}
@@ -54,6 +55,7 @@
 		for(int i = 1; i < array.count; i++){
 			UIView *firstTower = towers[i-1];
 			UIView *secondTower = towers[i];
+			NSLog(@"%i, %i", firstTower.tag, secondTower.tag);
 			
 			[NSThread sleepForTimeInterval:delay];
 			dispatch_sync(dispatch_get_main_queue(), ^{
@@ -67,13 +69,17 @@
 					[firstTower setBackgroundColor:[UIColor redColor]];
 					[secondTower setBackgroundColor:[UIColor redColor]];
 					
-					CGRect firstFrame = firstTower.frame;
-					[firstTower setFrame:secondTower.frame];
-					[secondTower setFrame:firstFrame];
-					
 					[towers setObject:firstTower atIndexedSubscript:i];
 					[towers setObject:secondTower atIndexedSubscript:i-1];
+					
+					CGRect firstFrame = firstTower.frame;
+					[[self viewWithTag:i] setFrame:[self viewWithTag:i-1].frame];
+					[[self viewWithTag:i-1] setFrame:firstFrame];
+					
+					firstTower.tag = i;
+					secondTower.tag = i-1;
 				});
+				
 
 				NSObject *first = array[i];
 				[array setObject:array[i-1] atIndexedSubscript:i];
@@ -89,6 +95,15 @@
 		}//end for
 	}//end while
 }//end method
+
+-(void)swapFrames:(NSArray *)object{
+	UIView *first = object[0];
+	UIView *second = object[1];
+	
+	CGRect firstFrame = first.frame;
+	[first setFrame:second.frame];
+	[second setFrame:firstFrame];
+}
 
 
 -(void)deviceOrientationDidChange:(NSNotification *)notification{
