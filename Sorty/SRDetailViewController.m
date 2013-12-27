@@ -54,7 +54,7 @@
 	if(self.navigationController.navigationBar.hidden){
 		reveal = nil;
 		self.navigationController.navigationBar.hidden = NO;
-		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.5f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
 			CGRect downFrame = self.navigationController.navigationBar.frame;
 			downFrame.origin.y = [[UIApplication sharedApplication] statusBarFrame].size.height;
 			[self.navigationController.navigationBar setFrame:downFrame];
@@ -63,7 +63,7 @@
 	
 	else{
 		CGRect navigationBarFrame = self.navigationController.navigationBar.frame;
-		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.5f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.6f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
 			CGRect upFrame = navigationBarFrame;
 			upFrame.origin.y = -upFrame.size.height;
 			[self.navigationController.navigationBar setFrame:upFrame];

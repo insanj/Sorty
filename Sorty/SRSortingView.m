@@ -37,12 +37,11 @@
 		float height = ceilf(2 + ((((NSNumber *)given[i]).intValue - minVal) * ((self.frame.size.height - 2)/(maxVal - minVal))));
 		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (self.frame.size.width / array.count)), self.frame.size.height - height, ceilf(self.frame.size.width / array.count), height)];
 		tower.backgroundColor = towerColor;
-		tower.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[towers addObject:tower];
 		[self addSubview:towers[i]];
 	}
 	
-	//below might work, irrelevant, however, when the towers do not show
 	if([name isEqualToString:@"Bubble Sort"])
 		[NSThread detachNewThreadSelector:@selector(bubbleSort) toTarget:self withObject:nil];
 }//end if
@@ -70,9 +69,10 @@
 					CGRect firstFrame = firstTower.frame;
 					[firstTower setFrame:secondTower.frame];
 					[secondTower setFrame:firstFrame];
+
 					
 					[towers setObject:firstTower atIndexedSubscript:i];
-					[towers setObject:secondTower atIndexedSubscript:i-1];					
+					[towers setObject:secondTower atIndexedSubscript:i-1];
 				});
 				
 				NSObject *first = array[i];
