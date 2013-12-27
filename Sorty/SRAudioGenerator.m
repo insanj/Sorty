@@ -7,7 +7,7 @@
 //
 
 #import "SRAudioGenerator.h"
-
+/*
 OSStatus RenderTone(
 					void *inRefCon,
 					AudioUnitRenderActionFlags 	*ioActionFlags,
@@ -135,4 +135,4 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState)
 		
 		[selectedButton setTitle:NSLocalizedString(@"Stop", nil) forState:0];
 	}
-}
+}*/

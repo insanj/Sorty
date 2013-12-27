@@ -48,7 +48,7 @@
 	[self.view addSubview:sortingView];
 	
 	NSMutableArray *gen = [NSMutableArray new];
-	for(int i = 0, imax = 150; i < imax; i++)
+	for(int i = 0, imax = 50; i < imax; i++)
 		[gen addObject:@(arc4random() % imax)];
 	sortingView.delay = 1/gen.count;
 	[sortingView sort:gen kind:detailItem];

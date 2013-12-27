@@ -11,6 +11,7 @@
 @interface SRSortingView : UIView {
 	NSMutableArray *array, *towers;
 	NSThread *sortThread;
+	NSInteger minVal, maxVal;
 }
 
 @property (nonatomic, retain) UIColor *towerColor;
