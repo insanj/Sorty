@@ -23,7 +23,7 @@
 
 -(void)sort:(NSArray *)given kind:(NSString *)name{
 	
-	int maxVal = -MAXFLOAT, minVal = MAXFLOAT;
+	NSInteger maxVal = -MAXFLOAT, minVal = MAXFLOAT;
 	for(NSNumber *n in given){
 		if(n.intValue > maxVal)
 			maxVal = n.intValue;
@@ -33,8 +33,8 @@
 	
 	array = [[NSMutableArray alloc] initWithArray:given];
 	towers = [[NSMutableArray alloc] init];
-	for(int i = 0; i < given.count; i++){
-		float height = ceilf(2 + ((((NSNumber *)given[i]).intValue - minVal) * ((self.frame.size.height - 2)/(maxVal - minVal))));
+	for(NSInteger i = 0; i < given.count; i++){
+		CGFloat height = ceilf(2 + ((((NSNumber *)given[i]).intValue - minVal) * ((self.frame.size.height - 2)/(maxVal - minVal))));
 		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (self.frame.size.width / array.count)), self.frame.size.height - height, ceilf(self.frame.size.width / array.count), height)];
 		tower.backgroundColor = towerColor;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -47,7 +47,7 @@
 			BOOL swapped = YES;
 			while(swapped){
 				swapped = NO;
-				for(int i = 1; i < array.count; i++){
+				for(NSInteger i = 1; i < array.count; i++){
 					UIView *firstTower = towers[i-1];
 					UIView *secondTower = towers[i];
 					
