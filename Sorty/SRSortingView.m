@@ -25,7 +25,7 @@
 	array = [[NSMutableArray alloc] initWithArray:given];
 	towers = [[NSMutableArray alloc] init];
 	for(int i = 0; i < given.count; i++){
-		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(i * (self.frame.size.width / array.count), self.frame.size.height, self.frame.size.width / array.count, self.frame.size.height)];
+		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(floorf(i * (self.frame.size.width / array.count)), self.frame.size.height, floorf(self.frame.size.width / array.count), floorf(self.frame.size.height/((NSNumber *)given[i]).intValue))];
 		tower.backgroundColor = towerColor;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		
