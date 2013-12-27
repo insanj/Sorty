@@ -22,14 +22,25 @@
 }//end method
 
 -(void)sort:(NSArray *)given kind:(NSString *)name{
+	
+	int maxVal = -MAXFLOAT, minVal = MAXFLOAT;
+	for(NSNumber *n in given){
+		if(n.intValue > maxVal)
+			maxVal = n.intValue;
+		if(n.intValue < minVal)
+			minVal = n.intValue;
+	}
+	
+	NSLog(@"%i %i", minVal, maxVal);
 	array = [[NSMutableArray alloc] initWithArray:given];
 	towers = [[NSMutableArray alloc] init];
 	for(int i = 0; i < given.count; i++){
-		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(floorf(i * (self.frame.size.width / array.count)), self.frame.size.height, floorf(self.frame.size.width / array.count), floorf(self.frame.size.height/((NSNumber *)given[i]).intValue))];
+		float height = ceilf(2 + ((((NSNumber *)given[i]).intValue - minVal) * ((self.frame.size.height - 2)/(maxVal - minVal))));
+		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (self.frame.size.width / array.count)), self.frame.size.height - height, ceilf(self.frame.size.width / array.count), height)];
 		tower.backgroundColor = towerColor;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		
-		NSLog(@"%i: %@ x:%f, y:%f w:%f h:%f", i, tower, tower.frame.origin.x, tower.frame.origin.y, tower.frame.size.width, tower.frame.size.height);
+		NSLog(@"%i: %@", i, tower);
 		[self addSubview:tower]; //<-- DOESN'T WORK
 		[towers addObject:tower];
 	}

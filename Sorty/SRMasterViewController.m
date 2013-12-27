@@ -34,6 +34,7 @@
 
 	self.detailViewController = (SRDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 	self.tableView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
+	self.clearsSelectionOnViewWillAppear = YES;
 }//end method
 
 -(void)didReceiveMemoryWarning{

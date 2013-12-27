@@ -408,11 +408,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Julian Weiss (597UZ8TE8U)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sorty/Sorty-Prefix.pch";
 				INFOPLIST_FILE = "Sorty/Sorty-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "C348A8D7-FF25-4F55-937B-A815F18961F0";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -422,11 +423,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Julian Weiss (597UZ8TE8U)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sorty/Sorty-Prefix.pch";
 				INFOPLIST_FILE = "Sorty/Sorty-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "C348A8D7-FF25-4F55-937B-A815F18961F0";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
