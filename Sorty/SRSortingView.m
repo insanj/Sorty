@@ -47,8 +47,8 @@
 		[sortThread start];
 	}
 	
-	else if([name isEqualToString:@"Bogo Sort"]){
-		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bogoSort) object:nil];
+	else if([name isEqualToString:@"Quick Sort"]){
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
 		[sortThread start];
 	}
 }//end if
@@ -141,61 +141,50 @@
 	}//end while
 }//end method
 
-
-/*
-
-[NSThread sleepForTimeInterval:delay];
-dispatch_sync(dispatch_get_main_queue(), ^{
-	[firstTower setBackgroundColor:[UIColor redColor]];
-	[secondTower setBackgroundColor:[UIColor redColor]];
-	
-	[towers setObject:firstTower atIndexedSubscript:i];
-	[towers setObject:secondTower atIndexedSubscript:i-1];
-	
-	[self playSum:([array[i-1] intValue] + [array[i] intValue])];
-});*/
-
 -(void)quickSort{
 	[self quickSort:array low:0 high:(int)array.count-1];
 }
 
 -(void)quickSort:(NSMutableArray*)a low:(int)low high:(int)high{
+	if([sortThread isCancelled])
+		return;
+		
 	[NSThread sleepForTimeInterval:delay];
-	int piv = (arc4random() % (high-low))+low;
+	int piv = [a[(arc4random() % (high-low))+low] intValue];
 	dispatch_sync(dispatch_get_main_queue(), ^{[towers[piv] setBackgroundColor:[UIColor redColor]];});
 				  
 	int firstPos = low;
 	int lastPos = high;
 	
 	while(firstPos < lastPos){
-		while(a[firstPos] < a[piv]){
+		while([a[firstPos] intValue] < piv){
 			firstPos++;
 			if(firstPos > lastPos)
 				break;
 		}//end while
 		
-		while (a[firstPos] > a[piv]){
+		while([a[firstPos] intValue] > piv){
 			lastPos--;
 			if(lastPos < firstPos)
 				break;
 		}//end while
 		
 		if(firstPos <= lastPos){
-			[NSThread sleepForTimeInterval:delay];
 			[a exchangeObjectAtIndex:firstPos withObjectAtIndex:lastPos];
 			
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[towers[firstPos] setBackgroundColor:[UIColor greenColor]];
 				[towers[lastPos] setBackgroundColor:[UIColor greenColor]];
 				[self playSum:([a[firstPos] intValue] + [array[lastPos] intValue])];
+				[self updateTowers];
+
 			});
 			
 			[towers exchangeObjectAtIndex:firstPos withObjectAtIndex:lastPos];
-			[self genTowers];
 			firstPos++;
 			lastPos--;
 				
-			if (firstPos>lastPos)
+			if(firstPos>lastPos)
 				break;
 		}//end if
 		

@@ -58,10 +58,7 @@
 		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
 			
 			CGRect downFrame = self.navigationController.navigationBar.frame;
-
-			
 			downFrame.origin.y = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])?[[UIApplication sharedApplication] statusBarFrame].size.height:[[UIApplication sharedApplication] statusBarFrame].size.width;
-			NSLog(@"%f", downFrame.origin.y);
 			[self.navigationController.navigationBar setFrame:downFrame];
 		} completion:nil];
 	}
@@ -95,6 +92,7 @@
 }
 -(void)viewDidDisappear:(BOOL)animated{
 	sortingView.soundsEnabled = NO;
+	[sortingView.sortThread cancel];
 }
 
 -(void)didReceiveMemoryWarning{
