@@ -12,12 +12,8 @@
 @synthesize towerColor, delay, sortThread, soundsEnabled;
 
 -(SRSortingView *)initWithFrame:(CGRect)frame{
-    if((self = [super initWithFrame:frame])){
+    if((self = [super initWithFrame:frame]))
 		towerColor = [UIColor blackColor];
-		soundsEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"];
-		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
-	}
 	
     return self;
 }//end method
@@ -42,8 +38,10 @@
 		[self addSubview:towers[i]];
 	}//end for
 	
+	soundsEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"];
 	soundDelay = delay>0.f?delay:.01;
 	freqCoeff = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"];
+	
 	if([name isEqualToString:@"Bubble Sort"]){
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bubbleSort) object:nil];
 		[sortThread start];
@@ -56,9 +54,9 @@
 }//end if
 
 -(void)bubbleSort{
-	BOOL swapped = YES;
-	while(swapped){
-		swapped = NO;
+	BOOL sorted = NO;
+	while(!sorted){
+		sorted = YES;
 
 		for(int i = 1; i < array.count; i++){
 			UIView *firstTower = towers[i-1];
@@ -72,31 +70,36 @@
 			
 
 			if([array[i-1] intValue] > [array[i] intValue]){
-				swapped = YES;
+				sorted = NO;
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
 					[firstTower setBackgroundColor:[UIColor redColor]];
 					[secondTower setBackgroundColor:[UIColor redColor]];
-					
+		
 					[towers setObject:firstTower atIndexedSubscript:i];
 					[towers setObject:secondTower atIndexedSubscript:i-1];
+					
+					[self playSum:([array[i-1] intValue] + [array[i] intValue])];
 				});
 				
 				[array exchangeObjectAtIndex:i-1 withObjectAtIndex:i];
-				[self playSum:([array[i-1] intValue] + [array[i] intValue])];
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
 					[firstTower setBackgroundColor:towerColor];
 					[secondTower setBackgroundColor:towerColor];
+					
 					[self updateTowers];
-
 				});
-
 			}//end if
 		}//end for
 	}//end while
+	
+	if(soundsEnabled){
+		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:500 amplitude:2.5];
+		[gen playForDuration:0.25];
+	}//end if
 }//end method
 
 -(void)bogoSort{
@@ -138,7 +141,6 @@
 	}//end while
 }//end method
 
-
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled){
 		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * freqCoeff) amplitude:2];
@@ -159,8 +161,7 @@
 		[towers addObject:tower];
 		[self addSubview:towers[i]];
 	}
-
-}
+}//end method
 
 -(void)updateTowers{
 	for(int i = 0; i < array.count; i++){
@@ -173,16 +174,6 @@
 		[towers setObject:tower atIndexedSubscript:i];
 		[self addSubview:towers[i]];
 	}
-}
-
--(void)deviceOrientationDidChange:(NSNotification *)notification{
-	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-	NSLog(@"rotated to: %d", orientation);
-}
-
--(void)dealloc{
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-}
+}//end method
 
 @end

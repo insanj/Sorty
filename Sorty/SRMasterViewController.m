@@ -22,7 +22,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:10.f forKey:@"SRFreq"];
-	
 		
     [super viewDidLoad];
 	CGRect titleBarFrame = [@"Sorty" boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
@@ -59,7 +58,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 
 -(void)changedItems:(UISlider *)sender{
 	[[NSUserDefaults standardUserDefaults] setFloat:sender.value forKey:@"SRItems"];
-	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = @(sender.value).stringValue;
+	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = @((int)sender.value).stringValue;
 }
 
 -(void)changedFreq:(UISlider *)sender{
@@ -171,7 +170,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 			UISlider *items = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, cell.frame.size.width/3, 50)];
 			items.center =  CGPointMake(items.center.x, cell.center.y + 2);
 			items.minimumValue = 10;
-			items.maximumValue = 500;
+			items.maximumValue = 250;
 			[items addTarget:self action:@selector(changedItems:) forControlEvents:UIControlEventValueChanged];
 			[items setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]];
 			items.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -181,7 +180,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 				[cell addSubview:items];
 			
 			cell.textLabel.text = @"Items";
-			cell.detailTextLabel.text = @(items.value).stringValue;
+			cell.detailTextLabel.text = @((int)items.value).stringValue;
 		}
 		
 		else if(indexPath.row == 3){
