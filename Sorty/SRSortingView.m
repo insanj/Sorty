@@ -11,6 +11,8 @@
 @implementation SRSortingView
 @synthesize towerColor, delay, sortThread, soundsEnabled;
 
+#pragma mark - initializations
+
 -(SRSortingView *)initWithFrame:(CGRect)frame{
     if((self = [super initWithFrame:frame])){
 		towerColor = [UIColor blackColor];
@@ -54,6 +56,8 @@
 		[sortThread start];
 	}
 }//end if
+
+#pragma mark - sorts
 
 -(void)bubbleSort{
 	BOOL sorted = NO;
@@ -194,6 +198,8 @@
 			[self quickSort:array low:firstPos high:high];
 	}//end while
 }//end method
+
+#pragma mark - sounds and towers
 
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled)

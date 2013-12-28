@@ -16,7 +16,7 @@ OSStatus RenderTone(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, c
 
 	SRToneGenerator *toneGenerator = (__bridge SRToneGenerator *)inRefCon;
 	double theta = toneGenerator->theta;
-    double amplitude = toneGenerator->amplitude;
+	double amplitude = toneGenerator->amplitude;
 	double theta_increment = 2.0 * M_PI * toneGenerator->frequency / toneGenerator->sampleRate;
     
 	const int channel = 0;
@@ -41,7 +41,7 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 
 @implementation SRToneGenerator
 
-#pragma initializations
+#pragma mark - initializations
 -(SRToneGenerator *)init{
 	if((self = [super init]))
 		units = [[NSMutableArray alloc] init];
@@ -92,7 +92,7 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 	return toneUnit;
 }//end method
 
-#pragma playing and stopping
+#pragma mark - playing and stopping
 -(void)play:(float)freq{
 	frequency = freq;
 	AudioComponentInstance toneUnit = [self createToneUnitWithFreq:freq];

@@ -51,6 +51,8 @@
 	}
 }//end method
 
+#pragma mark - effects
+
 -(void)revealBar{
 	if(self.navigationController.navigationBar.hidden){
 		reveal = nil;
@@ -95,11 +97,8 @@
 	[sortingView.sortThread cancel];
 }
 
--(void)didReceiveMemoryWarning{
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - split view
+
 -(void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController{
     barButtonItem.title = NSLocalizedString(@"Sorts", @"Sorts");
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
