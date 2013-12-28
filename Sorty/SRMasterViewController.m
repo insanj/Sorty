@@ -15,10 +15,14 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 -(void)viewDidLoad{
 	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort"].mutableCopy;
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
-		[[NSUserDefaults standardUserDefaults] setFloat:50 forKey:@"SRItems"];
+		[[NSUserDefaults standardUserDefaults] setFloat:50.f forKey:@"SRItems"];
 
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:1/[[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] forKey:@"SRDelay"];
+	
+	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"] == 0.f)
+		[[NSUserDefaults standardUserDefaults] setFloat:10.f forKey:@"SRFreq"];
+	
 		
     [super viewDidLoad];
 	CGRect titleBarFrame = [@"Sorty" boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
@@ -58,6 +62,13 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = @(sender.value).stringValue;
 }
 
+-(void)changedFreq:(UISlider *)sender{
+	[[NSUserDefaults standardUserDefaults] setFloat:sender.value forKey:@"SRFreq"];
+	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]].detailTextLabel.text = @(sender.value).stringValue;
+}
+
+
+
 #pragma mark - table view
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
 	return 3;
@@ -73,7 +84,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 	if(section==0)
-		return 3;
+		return 4;
 	else if(section==1)
 		return objects.count;
 	return 1;
@@ -171,6 +182,23 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 			
 			cell.textLabel.text = @"Items";
 			cell.detailTextLabel.text = @(items.value).stringValue;
+		}
+		
+		else if(indexPath.row == 3){
+			UISlider *freq = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, cell.frame.size.width/3, 50)];
+			freq.center =  CGPointMake(freq.center.x, cell.center.y + 2);
+			freq.minimumValue = 1;
+			freq.maximumValue = 100;
+			[freq addTarget:self action:@selector(changedFreq:) forControlEvents:UIControlEventValueChanged];
+			[freq setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"]];
+			freq.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
+			freq.tag = 4;
+			
+			if(![cell viewWithTag:4])
+				[cell addSubview:freq];
+			
+			cell.textLabel.text = @"Frequency Coeff";
+			cell.detailTextLabel.text = @(freq.value).stringValue;
 		}
 	}//end == 0
 	

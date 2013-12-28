@@ -40,8 +40,10 @@
 		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[towers addObject:tower];
 		[self addSubview:towers[i]];
-	}
+	}//end for
 	
+	soundDelay = delay>0.f?delay:.01;
+	freqCoeff = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"];
 	if([name isEqualToString:@"Bubble Sort"]){
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bubbleSort) object:nil];
 		[sortThread start];
@@ -51,8 +53,6 @@
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bogoSort) object:nil];
 		[sortThread start];
 	}
-
-
 }//end if
 
 -(void)bubbleSort{
@@ -141,13 +141,9 @@
 
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled){
-		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * 10) amplitude:2];
-		[gen playForDuration:delay>0.f?delay*10:.0005];
-	
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
-			gen = nil;
-		});
-	}
+		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * freqCoeff) amplitude:2];
+		[gen playForDuration:soundDelay];
+	}//end if
 }
 
 -(void)genTowers{

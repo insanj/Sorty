@@ -12,7 +12,7 @@
 @interface SRSortingView : UIView {
 	NSMutableArray *array, *towers;
 	NSInteger minVal, maxVal;
-	
+	CGFloat soundDelay, freqCoeff;
 }
 
 @property (nonatomic, retain) UIColor *towerColor;
