@@ -36,22 +36,20 @@
 		[titleButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
 		[titleButton addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchUpInside];
 		self.navigationItem.titleView = titleButton;
+		
+		sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
+		sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
+		sortingView.towerColor = [UIColor purpleColor];
+		sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		[self.view addSubview:sortingView];
+		
+		NSMutableArray *gen = [NSMutableArray new];
+		for(int i = 0, imax = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]; i < imax; i++)
+			[gen addObject:@(arc4random() % imax)];
+		sortingView.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"];
+		[sortingView sort:gen kind:detailItem];
 	}
 }//end method
-
--(void)viewWillAppear:(BOOL)animated{
-	sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
-	sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
-	sortingView.towerColor = [UIColor purpleColor];
-	sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-	[self.view addSubview:sortingView];
-	
-	NSMutableArray *gen = [NSMutableArray new];
-	for(int i = 0, imax = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]; i < imax; i++)
-		[gen addObject:@(arc4random() % imax)];
-	sortingView.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"];
-	[sortingView sort:gen kind:detailItem];
-}
 
 -(void)revealBar{
 	if(self.navigationController.navigationBar.hidden){
@@ -98,7 +96,7 @@
     self.masterPopoverController = nil;
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewDidDisappear:(BOOL)animated{
 	sortingView.soundsEnabled = NO;
 
 	if(self.navigationController.navigationBar.hidden){

@@ -13,7 +13,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 
 #pragma mark - view cycle
 -(void)viewDidLoad{
-	objects = @[@"Bogo Sort", @"Bubble Sort", @"Insertion Sort", @"Selection Sort"].mutableCopy;
+	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort"].mutableCopy;
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50 forKey:@"SRItems"];
 
@@ -84,83 +84,105 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-	static NSString *identifier = @"SRCell";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+	NSString *identifier = @"SRCell";
+	if(indexPath.section == 0)
+		identifier = @"SROptionCell";
+	else if(indexPath.section == 2)
+		identifier = @"SRAboutCell";
 	
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
 	if(!cell){
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-			
+		
 		if(indexPath.section == 0){
-			if(indexPath.row == 0){
-				UISwitch *sounds = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-				sounds.center =  CGPointMake(cell.frame.size.width - sounds.frame.size.width*2.25, cell.center.y);
-				[sounds addTarget:self action:@selector(switchSounds:) forControlEvents:UIControlEventValueChanged];
-				[sounds setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"]];
-				sounds.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-				[cell addSubview:sounds];
-				
-				cell.detailTextLabel.text = sounds.isOn?@"ON":@"OFF";
-			}
-			
-			else if(indexPath.row == 1){
-				UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
-				delay.center =  CGPointMake(cell.frame.size.width - delay.frame.size.width, cell.center.y);
-				delay.minimumValue = 0.f;
-				delay.maximumValue = 1.f;
-				[delay addTarget:self action:@selector(changedDelay:) forControlEvents:UIControlEventValueChanged];
-				[delay setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"]];
-				delay.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-				[cell addSubview:delay];
-				
-				cell.detailTextLabel.text = @(delay.value).stringValue;
-			}
-			
-			else if(indexPath.row == 2){
-				UISlider *items = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
-				items.center =  CGPointMake(cell.frame.size.width - items.frame.size.width, cell.center.y);
-				items.minimumValue = 10;
-				items.maximumValue = 500;
-				[items addTarget:self action:@selector(changedItems:) forControlEvents:UIControlEventValueChanged];
-				[items setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]];
-				items.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-				[cell addSubview:items];
-				
-				cell.detailTextLabel.text = @(items.value).stringValue;
-			}
-			
-		}//end if
-	}//end if
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			cell.textLabel.font = [UIFont systemFontOfSize:18.f];
+			cell.textLabel.textColor = [UIColor blackColor];
+			cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
+			cell.detailTextLabel.textColor = [UIColor blackColor];
+			cell.accessoryType = UITableViewCellAccessoryNone;
+		}
+		
+		else if(indexPath.section == 1){
+			cell.textLabel.text = objects[indexPath.row];
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:18.f];
+			cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
+			cell.detailTextLabel.text = nil;
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
+		
+		else{
+			cell.textLabel.text = aboutText;
+			cell.textLabel.textAlignment = NSTextAlignmentNatural;
+			cell.textLabel.numberOfLines = 0;
+			cell.textLabel.font = [UIFont systemFontOfSize:14.f];
+			cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
+			cell.detailTextLabel.text = nil;
+		}
+	}//end nil
 	
 	if(indexPath.section == 0){
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-		if(indexPath.row == 0)
-			cell.textLabel.text = @"Sounds";
+		if(indexPath.row == 0){
+			UISwitch *sounds = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+			sounds.center =  CGPointMake(cell.frame.size.width - sounds.frame.size.width*2.25, cell.center.y);
+			[sounds addTarget:self action:@selector(switchSounds:) forControlEvents:UIControlEventValueChanged];
+			[sounds setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"]];
+			sounds.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+			sounds.tag = 1;
 			
-		else if(indexPath.row == 1)
-			cell.textLabel.text = @"Delay";
-				
-		else if(indexPath.row == 2)
-			cell.textLabel.text = @"Items";
-	}
-	
-	if(indexPath.section == 1){
-		cell.textLabel.text = objects[indexPath.row];
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:18.f];
-		cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
-		cell.detailTextLabel.text = nil;
+			if(![cell viewWithTag:1])
+				[cell addSubview:sounds];
+			
+			cell.textLabel.text = @"Sounds";
+			cell.detailTextLabel.text = sounds.isOn?@"ON":@"OFF";
+		}
 		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	}
+		else if(indexPath.row == 1){
+			UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
+			delay.center =  CGPointMake(cell.frame.size.width - delay.frame.size.width, cell.center.y);
+			delay.minimumValue = 0.f;
+			delay.maximumValue = 1.f;
+			[delay addTarget:self action:@selector(changedDelay:) forControlEvents:UIControlEventValueChanged];
+			[delay setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"]];
+			delay.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
+			delay.tag = 2;
+			
+			if(![cell viewWithTag:2])
+				[cell addSubview:delay];
+			
+			cell.textLabel.text = @"Delay";
+			cell.detailTextLabel.text = @(delay.value).stringValue;
+		}
+		
+		else if(indexPath.row == 2){
+			UISlider *items = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
+			items.center =  CGPointMake(cell.frame.size.width - items.frame.size.width, cell.center.y);
+			items.minimumValue = 10;
+			items.maximumValue = 500;
+			[items addTarget:self action:@selector(changedItems:) forControlEvents:UIControlEventValueChanged];
+			[items setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]];
+			items.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
+			items.tag = 3;
+			
+			if(![cell viewWithTag:3])
+				[cell addSubview:items];
+			
+			cell.textLabel.text = @"Items";
+			cell.detailTextLabel.text = @(items.value).stringValue;
+		}
+	}//end == 0
 	
-	if(indexPath.section == 2){
-		cell.textLabel.text = aboutText;
-		cell.textLabel.textAlignment = NSTextAlignmentNatural;
-		cell.textLabel.numberOfLines = 0;
-		cell.textLabel.font = [UIFont systemFontOfSize:14.f];
-		cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
-		cell.detailTextLabel.text = nil;
-	}
+	else if(indexPath.section == 1){
+		if([@[@"Bubble Sort"] containsObject:objects[indexPath.row]]){
+			cell.textLabel.textColor = [UIColor blackColor];
+			[cell setUserInteractionEnabled:YES];
+		}
+		
+		else{
+			cell.textLabel.textColor = [UIColor lightGrayColor];
+			[cell setUserInteractionEnabled:NO];
+		}
+	}//end == 1
 	
     return cell;
 }//end method
