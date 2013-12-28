@@ -79,6 +79,21 @@
 	}//end else
 }//end method
 
+-(void)viewWillDisappear:(BOOL)animated{
+	if(self.navigationController.navigationBar.hidden){
+		reveal = nil;
+		self.navigationController.navigationBar.hidden = NO;
+		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+			CGRect downFrame = self.navigationController.navigationBar.frame;
+			downFrame.origin.y = [[UIApplication sharedApplication] statusBarFrame].size.height;
+			[self.navigationController.navigationBar setFrame:downFrame];
+		} completion:nil];
+	}//end if
+}
+-(void)viewDidDisappear:(BOOL)animated{
+	sortingView.soundsEnabled = NO;
+}
+
 -(void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
 }
@@ -95,19 +110,4 @@
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
 }
-
--(void)viewDidDisappear:(BOOL)animated{
-	sortingView.soundsEnabled = NO;
-
-	if(self.navigationController.navigationBar.hidden){
-		reveal = nil;
-		self.navigationController.navigationBar.hidden = NO;
-		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
-			CGRect downFrame = self.navigationController.navigationBar.frame;
-			downFrame.origin.y = [[UIApplication sharedApplication] statusBarFrame].size.height;
-			[self.navigationController.navigationBar setFrame:downFrame];
-		} completion:nil];
-	}//end if
-}
-
 @end
