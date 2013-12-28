@@ -24,10 +24,10 @@ OSStatus RenderTone(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, c
 	
 	for(UInt32 frame = 0; frame < inNumberFrames; frame++){
 		buffer[frame] = sin(theta) * amplitude;
-		
+	
 		theta += theta_increment;
-		if (theta > 2.0 * M_PI)
-			theta -= 2.0 * M_PI;
+		if (theta >= (2 * M_PI))
+			theta -= (2 * M_PI);
 	}//end for
 	
 	toneGenerator->theta = theta;
@@ -53,6 +53,7 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 		frequency = 440.f;
         amplitude = volume;
         sampleRate = 44100.0f;
+		theta = 0;
 	}//end if
     
     return self;

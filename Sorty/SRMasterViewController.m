@@ -24,10 +24,13 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		[[NSUserDefaults standardUserDefaults] setFloat:10.f forKey:@"SRFreq"];
 		
     [super viewDidLoad];
-	CGRect titleBarFrame = [@"Sorty" boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
+	NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+	NSString *name = [build isEqualToString:@"1"]?@"Sorty":[NSString stringWithFormat:@"Sorty (%@)", build];
+	
+	CGRect titleBarFrame = [name boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
 	UIButton *title = [[UIButton alloc] initWithFrame:titleBarFrame];
 	title.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
-	[title setTitle:@"Sorty" forState:UIControlStateNormal];
+	[title setTitle:name forState:UIControlStateNormal];
 	[title setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	self.navigationItem.titleView = title;
 	self.title = @"";
