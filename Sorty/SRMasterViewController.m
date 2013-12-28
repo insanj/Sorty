@@ -122,9 +122,11 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	}//end nil
 	
 	if(indexPath.section == 0){
+		CGFloat width = cell.frame.size.width/3;
+
 		if(indexPath.row == 0){
 			UISwitch *sounds = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-			sounds.center =  CGPointMake(cell.frame.size.width - sounds.frame.size.width*2.25, cell.center.y);
+			sounds.center =  CGPointMake(cell.frame.size.width - sounds.frame.size.width, cell.center.y + 2);
 			[sounds addTarget:self action:@selector(switchSounds:) forControlEvents:UIControlEventValueChanged];
 			[sounds setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"]];
 			sounds.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -138,8 +140,8 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		}
 		
 		else if(indexPath.row == 1){
-			UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
-			delay.center =  CGPointMake(cell.frame.size.width - delay.frame.size.width, cell.center.y);
+			UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, width, 50)];
+			delay.center =  CGPointMake(delay.center.x, cell.center.y + 2);
 			delay.minimumValue = 0.f;
 			delay.maximumValue = 1.f;
 			[delay addTarget:self action:@selector(changedDelay:) forControlEvents:UIControlEventValueChanged];
@@ -155,8 +157,8 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		}
 		
 		else if(indexPath.row == 2){
-			UISlider *items = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
-			items.center =  CGPointMake(cell.frame.size.width - items.frame.size.width, cell.center.y);
+			UISlider *items = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, cell.frame.size.width/3, 50)];
+			items.center =  CGPointMake(items.center.x, cell.center.y + 2);
 			items.minimumValue = 10;
 			items.maximumValue = 500;
 			[items addTarget:self action:@selector(changedItems:) forControlEvents:UIControlEventValueChanged];
