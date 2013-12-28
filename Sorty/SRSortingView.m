@@ -141,12 +141,77 @@
 	}//end while
 }//end method
 
+
+/*
+
+[NSThread sleepForTimeInterval:delay];
+dispatch_sync(dispatch_get_main_queue(), ^{
+	[firstTower setBackgroundColor:[UIColor redColor]];
+	[secondTower setBackgroundColor:[UIColor redColor]];
+	
+	[towers setObject:firstTower atIndexedSubscript:i];
+	[towers setObject:secondTower atIndexedSubscript:i-1];
+	
+	[self playSum:([array[i-1] intValue] + [array[i] intValue])];
+});*/
+
+-(void)quickSort{
+	[self quickSort:array low:0 high:(int)array.count-1];
+}
+
+-(void)quickSort:(NSMutableArray*)a low:(int)low high:(int)high{
+	[NSThread sleepForTimeInterval:delay];
+	int piv = (arc4random() % (high-low))+low;
+	dispatch_sync(dispatch_get_main_queue(), ^{[towers[piv] setBackgroundColor:[UIColor redColor]];});
+				  
+	int firstPos = low;
+	int lastPos = high;
+	
+	while(firstPos < lastPos){
+		while(a[firstPos] < a[piv]){
+			firstPos++;
+			if(firstPos > lastPos)
+				break;
+		}//end while
+		
+		while (a[firstPos] > a[piv]){
+			lastPos--;
+			if(lastPos < firstPos)
+				break;
+		}//end while
+		
+		if(firstPos <= lastPos){
+			[NSThread sleepForTimeInterval:delay];
+			[a exchangeObjectAtIndex:firstPos withObjectAtIndex:lastPos];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[towers[firstPos] setBackgroundColor:[UIColor greenColor]];
+				[towers[lastPos] setBackgroundColor:[UIColor greenColor]];
+				[self playSum:([a[firstPos] intValue] + [array[lastPos] intValue])];
+			});
+			
+			[towers exchangeObjectAtIndex:firstPos withObjectAtIndex:lastPos];
+			[self genTowers];
+			firstPos++;
+			lastPos--;
+				
+			if (firstPos>lastPos)
+				break;
+		}//end if
+		
+		if(low < lastPos)
+			[self quickSort:array low:low high:lastPos];
+		if(firstPos < high)
+			[self quickSort:array low:firstPos high:high];
+	}//end while
+}//end method
+
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled){
 		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * freqCoeff) amplitude:2];
 		[gen playForDuration:soundDelay];
 	}//end if
-}
+}//end method
 
 -(void)genTowers{
 	for(UIView *t in towers)

@@ -201,18 +201,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		}
 	}//end == 0
 	
-	else if(indexPath.section == 1){
-		if([@[@"Bubble Sort"] containsObject:objects[indexPath.row]]){
-			cell.textLabel.textColor = [UIColor blackColor];
-			[cell setUserInteractionEnabled:YES];
-		}
-		
-		else{
-			cell.textLabel.textColor = [UIColor lightGrayColor];
-			[cell setUserInteractionEnabled:NO];
-		}
-	}//end == 1
-	
     return cell;
 }//end method
 
@@ -222,7 +210,17 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	UIView *back = [[UIView alloc] initWithFrame:cell.frame];
     back.backgroundColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:225/255.f alpha:1.0];
     cell.selectedBackgroundView = back;
-}
+	
+	if(indexPath.section ==1){
+		if([@[@"Bubble Sort", @"Quick Sort"] containsObject:cell.textLabel.text])
+			cell.textLabel.textColor = [UIColor blackColor];
+		
+		else{
+			cell.textLabel.textColor = [UIColor lightGrayColor];
+			[cell setUserInteractionEnabled:NO];
+		}
+	}//end if
+}//end method
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
 	return UITableViewCellEditingStyleNone;
