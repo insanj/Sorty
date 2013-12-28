@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TGSineWaveToneGenerator.h"
+#import "SRToneGenerator.h"
 
 @interface SRSortingView : UIView {
 	NSMutableArray *array, *towers;
 	NSInteger minVal, maxVal;
 	CGFloat soundDelay, freqCoeff;
+	SRToneGenerator *gen;
 }
 
 @property (nonatomic, retain) UIColor *towerColor;

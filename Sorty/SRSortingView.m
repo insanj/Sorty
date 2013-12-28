@@ -12,8 +12,10 @@
 @synthesize towerColor, delay, sortThread, soundsEnabled;
 
 -(SRSortingView *)initWithFrame:(CGRect)frame{
-    if((self = [super initWithFrame:frame]))
+    if((self = [super initWithFrame:frame])){
 		towerColor = [UIColor blackColor];
+		gen = [[SRToneGenerator alloc] init];
+	}
 	
     return self;
 }//end method
@@ -96,10 +98,8 @@
 		}//end for
 	}//end while
 	
-	if(soundsEnabled){
-		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:500 amplitude:2.5];
-		[gen playForDuration:0.25];
-	}//end if
+	if(soundsEnabled)
+		[gen play:500 length:0.25];
 }//end method
 
 -(void)bogoSort{
@@ -196,10 +196,8 @@
 }//end method
 
 -(void)playSum:(CGFloat)freq{
-	if(soundsEnabled){
-		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * freqCoeff) amplitude:2];
-		[gen playForDuration:soundDelay];
-	}//end if
+	if(soundsEnabled)
+		[gen play:(freq * freqCoeff) length:soundDelay];
 }//end method
 
 -(void)genTowers{
