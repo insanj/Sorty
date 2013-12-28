@@ -46,6 +46,13 @@
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bubbleSort) object:nil];
 		[sortThread start];
 	}
+	
+	else if([name isEqualToString:@"Bogo Sort"]){
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bogoSort) object:nil];
+		[sortThread start];
+	}
+
+
 }//end if
 
 -(void)bubbleSort{
@@ -81,24 +88,82 @@
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					[self updateTowers];
 					[firstTower setBackgroundColor:towerColor];
 					[secondTower setBackgroundColor:towerColor];
+					[self updateTowers];
+
 				});
+
 			}//end if
 		}//end for
 	}//end while
 }//end method
 
+-(void)bogoSort{
+	BOOL unsorted = YES;
+	while(unsorted){
+		unsorted = NO;
+		
+		for(int i = 1; i < array.count; i++){
+			UIView *firstTower = towers[i-1];
+			UIView *secondTower = towers[i];
+			
+			[NSThread sleepForTimeInterval:delay];
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[firstTower setBackgroundColor:[UIColor greenColor]];
+				[secondTower setBackgroundColor:[UIColor greenColor]];
+			});
+			
+			
+			if([array[i-1] intValue] > [array[i] intValue]){
+				[self playSum:([array[i-1] intValue] + [array[i] intValue])];
+				unsorted = YES;
+				
+				NSMutableArray *repl = [[NSMutableArray alloc] init];
+				for(int i = 0; i < array.count; i++){
+					int randEle = (arc4random() % (array.count-1));
+					if(repl.count > randEle && repl[randEle] == nil)
+						[repl insertObject:repl[i] atIndex:randEle];
+					else if(repl.count < randEle)
+						[repl insertObject:repl[i] atIndex:randEle];
+					else
+						i--;
+				}
+				
+				[NSThread sleepForTimeInterval:delay];
+				[self genTowers];
+				break;
+			}//end if
+		}//end for
+	}//end while
+}//end method
+
+
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled){
 		TGSineWaveToneGenerator __block *gen = [[TGSineWaveToneGenerator alloc] initWithFrequency:(freq * 10) amplitude:2];
-		[gen playForDuration:delay * 10];
+		[gen playForDuration:delay>0.f?delay*10:.0005];
 	
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
 			gen = nil;
 		});
 	}
+}
+
+-(void)genTowers{
+	for(UIView *t in towers)
+		[t removeFromSuperview];
+	
+	[towers removeAllObjects];
+	for(int i = 0; i < array.count; i++){
+		NSInteger height = ceilf(2 + ((((NSNumber *)array[i]).intValue - minVal) * ((self.frame.size.height - 2)/(maxVal - minVal))));
+		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (self.frame.size.width / array.count)), self.frame.size.height - height, ceilf(self.frame.size.width / array.count), height)];
+		tower.backgroundColor = towerColor;
+		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+		[towers addObject:tower];
+		[self addSubview:towers[i]];
+	}
+
 }
 
 -(void)updateTowers{

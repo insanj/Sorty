@@ -9,10 +9,11 @@
 #import "SRMasterViewController.h"
 
 @implementation SRMasterViewController
+static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover and the TGSineWaveToneGenerator project. Tap here to see what I'm up to (and, if you like it, follow me on twitter).";
 
 #pragma mark - view cycle
 -(void)viewDidLoad{
-	objects = @[@"Bubble Sort", @"Insertion Sort", @"Selection Sort"].mutableCopy;
+	objects = @[@"Bogo Sort", @"Bubble Sort", @"Insertion Sort", @"Selection Sort"].mutableCopy;
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50 forKey:@"SRItems"];
 
@@ -59,23 +60,27 @@
 
 #pragma mark - table view
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-	return 2;
+	return 3;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
 	if(section==0)
 		return @"Options";
-	return @"Algorithms";
+	else if(section==1)
+		return @"Algorithms";
+	return @"About";
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 	if(section==0)
+		return 3;
+	else if(section==1)
 		return objects.count;
-	return 3;
+	return 1;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-	return 50.f;
+	return indexPath.section==2?[aboutText boundingRectWithSize:CGSizeMake(self.view.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16.f]} context:nil].size.height:50.f;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -86,10 +91,7 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
 			
 		if(indexPath.section == 0){
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			
 			if(indexPath.row == 0){
-				cell.textLabel.text = @"Sounds";
 				UISwitch *sounds = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
 				sounds.center =  CGPointMake(cell.frame.size.width - sounds.frame.size.width*2.25, cell.center.y);
 				[sounds addTarget:self action:@selector(switchSounds:) forControlEvents:UIControlEventValueChanged];
@@ -101,7 +103,6 @@
 			}
 			
 			else if(indexPath.row == 1){
-				cell.textLabel.text = @"Delay";
 				UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
 				delay.center =  CGPointMake(cell.frame.size.width - delay.frame.size.width, cell.center.y);
 				delay.minimumValue = 0.f;
@@ -115,7 +116,6 @@
 			}
 			
 			else if(indexPath.row == 2){
-				cell.textLabel.text = @"Items";
 				UISlider *items = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width/3, 50)];
 				items.center =  CGPointMake(cell.frame.size.width - items.frame.size.width, cell.center.y);
 				items.minimumValue = 10;
@@ -131,12 +131,35 @@
 		}//end if
 	}//end if
 	
+	if(indexPath.section == 0){
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+		if(indexPath.row == 0)
+			cell.textLabel.text = @"Sounds";
+			
+		else if(indexPath.row == 1)
+			cell.textLabel.text = @"Delay";
+				
+		else if(indexPath.row == 2)
+			cell.textLabel.text = @"Items";
+	}
+	
 	if(indexPath.section == 1){
 		cell.textLabel.text = objects[indexPath.row];
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:18.f];
-		cell.textLabel.highlightedTextColor = [UIColor darkGrayColor];
+		cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
+		cell.detailTextLabel.text = nil;
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	}
+	
+	if(indexPath.section == 2){
+		cell.textLabel.text = aboutText;
+		cell.textLabel.textAlignment = NSTextAlignmentNatural;
+		cell.textLabel.numberOfLines = 0;
+		cell.textLabel.font = [UIFont systemFontOfSize:14.f];
+		cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
+		cell.detailTextLabel.text = nil;
 	}
 	
     return cell;
@@ -154,9 +177,6 @@
 	return UITableViewCellEditingStyleNone;
 }
 
--(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    return YES;
-}
 
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
 	NSString *stringToMove = [objects objectAtIndex:fromIndexPath.row];
@@ -165,11 +185,31 @@
 }//end method
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
 	if(indexPath.section==1){
 		SRDetailViewController *detail = [[SRDetailViewController alloc] init];
 		detail.detailItem = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
 		[self.navigationController pushViewController:detail animated:YES];
 	}
+	
+	else if(indexPath.section==2){
+		NSString *me = @"insanj";
+		if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetbot:"]])
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tweetbot:///user_profile/" stringByAppendingString:me]]];
+		
+		else if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitterrific:"]])
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"twitterrific:///profile?screen_name=" stringByAppendingString:me]]];
+		
+		else if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetings:"]])
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tweetings:///user?screen_name=" stringByAppendingString:me]]];
+		
+		else if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitter:"]])
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"twitter://user?screen_name=" stringByAppendingString:me]]];
+		
+		else
+			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"https://mobile.twitter.com/" stringByAppendingString:me]]];
+	}//end else if
 	
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad){
         NSString *name = objects[indexPath.row];
