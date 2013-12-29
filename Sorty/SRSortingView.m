@@ -215,60 +215,46 @@
 }//end method
 
 -(void)quickSort{
-	[self quickSort:items low:0 high:(int)items.count-1];
+	[self quickSort:items low:0 high:(NSInteger)items.count-1];
 }
 
--(void)quickSort:(SRSortingArray *)a low:(int)low high:(int)high{
+-(void)quickSort:(SRSortingArray *)a low:(NSInteger)low high:(NSInteger)high{
 	[NSThread sleepForTimeInterval:delay];
-	int piv = [a objectAtIndex:(arc4random() % ((high+low)/2))].intValue;
-	//NSLog(@"%i", piv);
-	dispatch_sync(dispatch_get_main_queue(), ^{[a setColorOfTower:piv to:[UIColor redColor]];});
-				
-	int firstPos = low;
-	int lastPos = high;
-	
-	while(firstPos < lastPos){
-		dispatch_sync(dispatch_get_main_queue(), ^{[a setColorOfTower:firstPos to:[UIColor redColor]];});
 
-		while([a compare:firstPos to:piv] < 0){
-			firstPos++;
-			if(firstPos > lastPos)
-				break;
-		}//end while
-		
-		while([a compare:lastPos to:piv] > 0){
-			lastPos--;
-			if(lastPos < firstPos)
-				break;
-		}//end while
-		
-		if(firstPos <= lastPos){
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[a setColorOfTower:firstPos to:[UIColor greenColor]];
-				[a setColorOfTower:lastPos to:[UIColor greenColor]];
-			});
-			
-			[self playSum:[a sumOf:firstPos and:lastPos]];
-			[a exchangeObjectAtIndex:firstPos withObjectAtIndex:lastPos];
+	if(low < high){
+		NSInteger pivot = (arc4random() % (high-low)) + low;
+		NSInteger left = low;
+		NSInteger right = high;
+		dispatch_sync(dispatch_get_main_queue(), ^{[items setColorOfTower:pivot to:[UIColor greenColor]];});
 
+		while(left <= right){
 			dispatch_sync(dispatch_get_main_queue(), ^{
-				[items resetColorOfTower:firstPos];
-				[items resetColorOfTower:lastPos];
-				[items regenerateTowersInto:self];
+				[items setColorOfTower:left to:[UIColor redColor]];
+				[items setColorOfTower:right to:[UIColor redColor]];
 			});
+
+			while([a compare:left to:pivot] < 0)
+				left++;
+			while([a compare:right to:pivot] > 0)
+				right--;
 			
-			firstPos++;
-			lastPos--;
+			if(left <= right){
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items setColorOfTower:left to:[UIColor greenColor]];
+					[items setColorOfTower:right to:[UIColor greenColor]];
+				});
 				
-			if(firstPos > lastPos)
-				break;
-		}//end if
+				[self playSum:[items sumOf:left and:right]];
+				[a exchangeObjectAtIndex:left withObjectAtIndex:right];
+
+				left++;
+				right--;
+			}
+		}
 		
-		if(low < lastPos)
-			[self quickSort:a low:low high:lastPos];
-		if(firstPos < high)
-			[self quickSort:a low:firstPos high:high];
-	}//end while
+		[self quickSort:a low:low high:right];
+		[self quickSort:a low:left high:high];
+	}
 }//end method
 
 #pragma mark - sounds and towers
