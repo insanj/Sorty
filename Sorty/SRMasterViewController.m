@@ -183,8 +183,8 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		else if(indexPath.row == 3){
 			UISlider *freq = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, cell.frame.size.width/3, 50)];
 			freq.center =  CGPointMake(freq.center.x, cell.center.y + 2);
-			freq.minimumValue = 1;
-			freq.maximumValue = 100;
+			freq.minimumValue = 5;
+			freq.maximumValue = 60;
 			[freq addTarget:self action:@selector(changedFreq:) forControlEvents:UIControlEventValueChanged];
 			[freq setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"]];
 			freq.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -209,7 +209,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
     cell.selectedBackgroundView = back;
 	
 	if(indexPath.section ==1){
-		if([@[@"Bubble Sort", @"Quick Sort"] containsObject:cell.textLabel.text])
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Quick Sort"] containsObject:cell.textLabel.text])
 			cell.textLabel.textColor = [UIColor blackColor];
 		
 		else{

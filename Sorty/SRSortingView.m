@@ -43,6 +43,11 @@
 		[sortThread start];
 	}
 	
+	else if([name isEqualToString:@"Cocktail Shaker Sort"]){
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(cocktailSort) object:nil];
+		[sortThread start];
+	}
+	
 	else if([name isEqualToString:@"Quick Sort"]){
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
 		[sortThread start];
@@ -96,6 +101,7 @@
 
 		for(int i = 1; i < items.count; i++){
 			[NSThread sleepForTimeInterval:delay];
+
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[items setColorOfTower:i-1 to:[UIColor greenColor]];
 				[items setColorOfTower:i to:[UIColor greenColor]];
@@ -124,6 +130,88 @@
 			}//end if
 		}//end for
 	}//end while
+	
+	for(int i = 1; i < items.count; i++)
+		[self playSum:[items sumOf:i-1 and:i]];
+
+}//end method
+
+
+-(void)cocktailSort{
+	BOOL sorted = NO;
+	while(!sorted){
+		sorted = YES;
+		
+		for(int i = 0; i < items.count-2; i++){
+			[NSThread sleepForTimeInterval:delay];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items setColorOfTower:i to:[UIColor greenColor]];
+				[items setColorOfTower:i+1 to:[UIColor greenColor]];
+			});
+			
+			if([items compare:i to:i+1] > 0){
+				sorted = NO;
+				
+				[NSThread sleepForTimeInterval:delay];
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items setColorOfTower:i to:[UIColor redColor]];
+					[items setColorOfTower:i+1 to:[UIColor redColor]];
+				});
+				
+				[self playSum:[items sumOf:i and:i+1]];
+				[items exchangeObjectAtIndex:i withObjectAtIndex:i+1];
+				
+				[NSThread sleepForTimeInterval:delay];
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items resetColorOfTower:i];
+					[items resetColorOfTower:i+1];
+					[items regenerateTowersInto:self];
+					
+				});
+				
+			}//end if
+		}//end for
+		
+		if(sorted){
+			[items setColorOfTower:items.count-1 to:[UIColor greenColor]];
+			break;
+		}
+		
+		for(int i = (int)items.count-2; i > 0; i--){
+			[NSThread sleepForTimeInterval:delay];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items setColorOfTower:i to:[UIColor greenColor]];
+				[items setColorOfTower:i+1 to:[UIColor greenColor]];
+			});
+			
+			if([items compare:i to:i+1] > 0){
+				sorted = NO;
+				
+				[NSThread sleepForTimeInterval:delay];
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items setColorOfTower:i to:[UIColor redColor]];
+					[items setColorOfTower:i+1 to:[UIColor redColor]];
+				});
+				
+				[self playSum:[items sumOf:i and:i+1]];
+				[items exchangeObjectAtIndex:i withObjectAtIndex:i+1];
+				
+				[NSThread sleepForTimeInterval:delay];
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items resetColorOfTower:i];
+					[items resetColorOfTower:i+1];
+					[items regenerateTowersInto:self];
+					
+				});
+				
+			}//end if
+		}//end for
+	}//end while
+	
+	for(int i = 0; i < items.count-1; i++)
+		[self playSum:[items sumOf:i and:i+1]];
 }//end method
 
 -(void)quickSort{
@@ -132,7 +220,8 @@
 
 -(void)quickSort:(SRSortingArray *)a low:(int)low high:(int)high{
 	[NSThread sleepForTimeInterval:delay];
-	int piv = [a objectAtIndex:(arc4random() % (high-low))+low].intValue;
+	int piv = [a objectAtIndex:(arc4random() % ((high+low)/2))].intValue;
+	//NSLog(@"%i", piv);
 	dispatch_sync(dispatch_get_main_queue(), ^{[a setColorOfTower:piv to:[UIColor redColor]];});
 				
 	int firstPos = low;
@@ -147,7 +236,7 @@
 				break;
 		}//end while
 		
-		while([a compare:firstPos to:piv] > 0){
+		while([a compare:lastPos to:piv] > 0){
 			lastPos--;
 			if(lastPos < firstPos)
 				break;
