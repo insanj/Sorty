@@ -37,7 +37,7 @@
 	[items generateTowersInto:self];
 	
 	soundsEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"];
-	soundDelay = delay>0?delay:.01;
+	soundDelay = delay>0.05f?delay:0.05f;
 	freqCoeff = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"];
 	
 	if([name isEqualToString:@"Bubble Sort"]){
