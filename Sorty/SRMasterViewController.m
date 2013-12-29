@@ -111,7 +111,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		}
 		
 		else if(indexPath.section == 1){
-			cell.textLabel.text = objects[indexPath.row];
 			cell.textLabel.font = [UIFont boldSystemFontOfSize:18.f];
 			cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
 			cell.detailTextLabel.text = nil;
@@ -119,7 +118,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		}
 		
 		else{
-			cell.textLabel.text = aboutText;
 			cell.textLabel.textAlignment = NSTextAlignmentNatural;
 			cell.textLabel.numberOfLines = 0;
 			cell.textLabel.font = [UIFont systemFontOfSize:14.f];
@@ -197,7 +195,13 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 			cell.detailTextLabel.text = @(freq.value).stringValue;
 		}
 	}//end == 0
-	
+		
+	else if(indexPath.section == 1)
+		cell.textLabel.text = objects[indexPath.row];
+
+	else
+		cell.textLabel.text = aboutText;
+
     return cell;
 }//end method
 

@@ -83,17 +83,24 @@
 -(void)viewWillDisappear:(BOOL)animated{
 	if(self.navigationController.navigationBar.hidden){
 		reveal = nil;
-		self.navigationController.navigationBar.hidden = NO;
 		[UIView animateWithDuration:0.75 delay:0.01 usingSpringWithDamping:0.65f initialSpringVelocity:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
 			CGRect downFrame = self.navigationController.navigationBar.frame;
 			downFrame.origin.y = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])?[[UIApplication sharedApplication] statusBarFrame].size.height:[[UIApplication sharedApplication] statusBarFrame].size.width;
 			[self.navigationController.navigationBar setFrame:downFrame];
 		} completion:nil];
+		self.navigationController.navigationBar.hidden = NO;
 	}//end if
 }
+
 -(void)viewDidDisappear:(BOOL)animated{
 	sortingView.soundsEnabled = NO;
 	[sortingView.sortThread cancel];
+	
+	if(self.navigationController.navigationBar.hidden){
+		CGRect downFrame = self.navigationController.navigationBar.frame;
+		downFrame.origin.y = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])?[[UIApplication sharedApplication] statusBarFrame].size.height:[[UIApplication sharedApplication] statusBarFrame].size.width;
+		[self.navigationController.navigationBar setFrame:downFrame];
+	}
 }
 
 #pragma mark - split view
