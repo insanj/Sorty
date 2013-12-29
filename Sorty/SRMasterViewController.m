@@ -9,11 +9,11 @@
 #import "SRMasterViewController.h"
 
 @implementation SRMasterViewController
-static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover and the TGSineWaveToneGenerator project. Tap here to see what I'm up to (and, if you like it, follow me on twitter).";
+static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover. Tap here to see what I'm up to (and, if you like it, follow me on twitter).";
 
 #pragma mark - view cycle
 -(void)viewDidLoad{
-	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort"].mutableCopy;
+	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Centrifuge Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort", @"Stooge Sort"].mutableCopy;
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50.f forKey:@"SRItems"];
 

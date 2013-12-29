@@ -16,16 +16,15 @@
 	NSMutableArray *units;
 	
 @public
-	double frequency;
-    double amplitude;
-    double sampleRate;
-    double theta;
+	CGFloat frequency;
+    CGFloat amplitude;
+    CGFloat sampleRate;
+    CGFloat theta;
 }
 
--(id)initWithFrequency:(double)hertz amplitude:(double)volume;
--(AudioComponentInstance)createToneUnitWithFreq:(float)freq;
--(void)play:(float)freq;
--(void)play:(float)freq length:(float)time;
+-(id)initWithAmplitude:(CGFloat)volume;
+-(AudioComponentInstance)createToneUnitWithFreq:(CGFloat)freq;
+-(void)play:(CGFloat)freq;
+-(void)play:(CGFloat)freq length:(CGFloat)time;
 -(void)stop;
-
 @end

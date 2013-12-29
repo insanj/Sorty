@@ -14,9 +14,8 @@
 #pragma mark - initializations
 
 -(instancetype)initWithFrame:(CGRect)frame{
-    if((self = [super initWithFrame:frame])){
-		gen = [[SRToneGenerator alloc] init];
-	}
+    if((self = [super initWithFrame:frame]))
+		gen = [[SRToneGenerator alloc] initWithAmplitude:1];
 	
     return self;
 }//end method
@@ -134,7 +133,6 @@
 	
 	for(int i = 1; i < items.count; i++)
 		[self playSum:[items sumOf:i-1 and:i]];
-
 }//end method
 
 

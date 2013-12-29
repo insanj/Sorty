@@ -15,18 +15,18 @@
 OSStatus RenderTone(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData){
 
 	SRToneGenerator *toneGenerator = (__bridge SRToneGenerator *)inRefCon;
-	double theta = toneGenerator->theta;
-	double amplitude = toneGenerator->amplitude;
-	double theta_increment = 2.0 * M_PI * toneGenerator->frequency / toneGenerator->sampleRate;
+	CGFloat theta = toneGenerator->theta;
+	CGFloat amplitude = toneGenerator->amplitude;
+	CGFloat theta_increment = 2 * M_PI * toneGenerator->frequency / toneGenerator->sampleRate;
     
 	const int channel = 0;
 	Float32 *buffer = (Float32 *)ioData->mBuffers[channel].mData;
 	
 	for(UInt32 frame = 0; frame < inNumberFrames; frame++){
-		buffer[frame] = sin(theta) * amplitude;
+		buffer[frame] = sinf(theta) * amplitude;
 	
 		theta += theta_increment;
-		if (theta >= (2 * M_PI))
+		if(theta >= (2 * M_PI))
 			theta -= (2 * M_PI);
 	}//end for
 	
@@ -45,22 +45,22 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 -(instancetype)init{
 	if((self = [super init]))
 		units = [[NSMutableArray alloc] init];
-    return [self initWithFrequency:44100.0f amplitude:1.0];
+    return [self initWithAmplitude:1.0];
 }
 
--(id)initWithFrequency:(double)hertz amplitude:(double)volume{
+-(id)initWithAmplitude:(CGFloat)volume{
     if((self = [super init])){
-		frequency = 440.f;
+		frequency = 0.f;
         amplitude = volume;
         sampleRate = 44100.0f;
-		theta = 0;
+		theta = 0.f;
 	}//end if
     
     return self;
 }//end init
 
 #pragma mark - tone unit creation
--(AudioComponentInstance)createToneUnitWithFreq:(float)freq{
+-(AudioComponentInstance)createToneUnitWithFreq:(CGFloat)freq{
 	AudioComponentInstance toneUnit;
 	AudioComponentDescription defaultOutputDescription;
 	defaultOutputDescription.componentType = kAudioUnitType_Output;
@@ -89,24 +89,24 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 	streamFormat.mChannelsPerFrame = 1;
 	streamFormat.mBitsPerChannel = four_bytes_per_float * eight_bits_per_byte;
 	err = AudioUnitSetProperty(toneUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
-	
+
 	return toneUnit;
 }//end method
 
 #pragma mark - playing and stopping
--(void)play:(float)freq{
+-(void)play:(CGFloat)freq{
 	frequency = freq;
 	AudioComponentInstance toneUnit = [self createToneUnitWithFreq:freq];
 	AudioUnitInitialize(toneUnit);
 	AudioOutputUnitStart(toneUnit);
 }//end method
 
--(void)play:(float)freq length:(float)time{
+-(void)play:(CGFloat)freq length:(CGFloat)time{
 	frequency = freq;
 	AudioComponentInstance toneUnit = [self createToneUnitWithFreq:freq];
 	AudioUnitInitialize(toneUnit);
 	AudioOutputUnitStart(toneUnit);
-	
+
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
 		AudioOutputUnitStop(toneUnit);
 		AudioUnitUninitialize(toneUnit);
