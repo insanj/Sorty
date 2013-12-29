@@ -214,47 +214,64 @@
 
 -(void)quickSort{
 	[self quickSort:items low:0 high:(NSInteger)items.count-1];
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[items colorSortedTower:0];
+	});
+	
+	for(int i = 0; i < items.count-1; i++){
+		[NSThread sleepForTimeInterval:delay];
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items colorSortedTower:i+1];
+		});
+		
+		[self playSum:[items sumOf:i and:i+1]];
+	}
 }
 
--(void)quickSort:(SRSortingArray *)a low:(NSInteger)low high:(NSInteger)high{
+-(void)quickSort:(SRSortingArray *)a low:(NSInteger)first high:(NSInteger)last{
 	[NSThread sleepForTimeInterval:delay];
-
-	if(low < high){
-		NSInteger pivot = (arc4random() % (high-low)) + low;
-		NSInteger left = low;
-		NSInteger right = high;
+	if(first >= last)
+		return;
+	
+	int piv = [a objectAtIndex:(first+last)/2].intValue;
+	long left = first;
+    long right = last;
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[items colorSortedTower:(first+last)/2];
+	});
+	
+    while(left <= right){
 		dispatch_sync(dispatch_get_main_queue(), ^{
-			[items colorSortedTower:pivot];
+			[items colorComparedTower:left];
+			[items colorComparedTower:right];
 		});
-
-		while(left <= right){
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[items colorComparedTower:left];
-				[items colorComparedTower:right];
-			});
-
-			while([a compare:left to:pivot] < 0)
-				left++;
-			while([a compare:right to:pivot] > 0)
-				right--;
-			
-			if(left <= right){
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					[items colorSortedTower:left];
-					[items colorSortedTower:right];
-				});
-				
-				[self playSum:[items sumOf:left and:right]];
-				[a exchangeObjectAtIndex:left withObjectAtIndex:right];
-
-				left++;
-				right--;
-			}
-		}
 		
-		[self quickSort:a low:low high:right];
-		[self quickSort:a low:left high:high];
-	}
+        while([a objectAtIndex:left].intValue < piv)
+            left++;
+		
+        while([a objectAtIndex:right].intValue > piv)
+            right--;
+		
+        if(left <= right){
+			[NSThread sleepForTimeInterval:delay];
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items colorSortedTower:left];
+				[items colorSortedTower:right];
+			});
+			
+			[self playSum:[items sumOf:left and:right]];
+            [a exchangeObjectAtIndex:left++ withObjectAtIndex:right--];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[a resetColorOfTower:left-1];
+				[a resetColorOfTower:right+1];
+				[a regenerateTowersInto:self];
+			});
+		}
+    }//end while
+	
+	[self quickSort:a low:first high:right];
+	[self quickSort:a low:left high:last];
 }//end method
 
 #pragma mark - sounds and towers
