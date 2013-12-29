@@ -13,7 +13,7 @@
 	NSMutableArray *numbers, *towers;
 }
 
-@property (nonatomic, retain) UIColor *towerColor;
+@property (nonatomic, retain) UIColor *plain, *compared, *sorted;
 
 //Augmented creation/management methods
 -(instancetype)initWithArray:(NSArray *)array;
@@ -24,8 +24,9 @@
 -(NSInteger)sumOf:(NSUInteger)idx1 and:(NSUInteger)idx2;
 
 //Tower management methods
--(void)resetColorOfTower:(NSUInteger)index;
--(void)setColorOfTower:(NSUInteger)index to:(UIColor *)color;
+-(void)resetColorOfTower:(NSInteger)index;
+-(void)colorComparedTower:(NSInteger)index;
+-(void)colorSortedTower:(NSInteger)index;
 -(void)generateTowersInFrame:(CGRect)frame;
 -(void)generateTowersInto:(UIView *)view;
 -(void)resetTowersIntoView:(UIView *)view;

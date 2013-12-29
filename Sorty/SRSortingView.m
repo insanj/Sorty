@@ -31,7 +31,9 @@
 	}
 	
 	items = [[SRSortingArray alloc] initWithArray:given];
-	items.towerColor = [UIColor purpleColor];
+	items.plain = UIColorFromRGB(0x8180ef);
+	items.compared = UIColorFromRGB(0xf1787d);
+	items.sorted = UIColorFromRGB(0x97fba7);
 	[items generateTowersInto:self];
 	
 	soundsEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"SRSounds"];
@@ -103,8 +105,8 @@
 			[NSThread sleepForTimeInterval:delay];
 
 			dispatch_sync(dispatch_get_main_queue(), ^{
-				[items setColorOfTower:i-1 to:[UIColor greenColor]];
-				[items setColorOfTower:i to:[UIColor greenColor]];
+				[items colorSortedTower:i-1];
+				[items colorSortedTower:i];
 			});
 			
 			if([items compare:i-1 to:i] > 0){
@@ -112,8 +114,8 @@
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					[items setColorOfTower:i-1 to:[UIColor redColor]];
-					[items setColorOfTower:i to:[UIColor redColor]];
+					[items colorComparedTower:i-1];
+					[items colorComparedTower:i-1];
 				});
 				
 				[self playSum:[items sumOf:i-1 and:i]];
@@ -124,7 +126,6 @@
 					[items resetColorOfTower:i-1];
 					[items resetColorOfTower:i];
 					[items regenerateTowersInto:self];
-
 				});
 				
 			}//end if
@@ -146,8 +147,8 @@
 			[NSThread sleepForTimeInterval:delay];
 			
 			dispatch_sync(dispatch_get_main_queue(), ^{
-				[items setColorOfTower:i to:[UIColor greenColor]];
-				[items setColorOfTower:i+1 to:[UIColor greenColor]];
+				[items colorSortedTower:i];
+				[items colorSortedTower:i+1];
 			});
 			
 			if([items compare:i to:i+1] > 0){
@@ -155,8 +156,8 @@
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					[items setColorOfTower:i to:[UIColor redColor]];
-					[items setColorOfTower:i+1 to:[UIColor redColor]];
+					[items colorComparedTower:i];
+					[items colorComparedTower:i+1];
 				});
 				
 				[self playSum:[items sumOf:i and:i+1]];
@@ -174,7 +175,7 @@
 		}//end for
 		
 		if(sorted){
-			[items setColorOfTower:items.count-1 to:[UIColor greenColor]];
+			[items colorSortedTower:items.count-1];
 			break;
 		}
 		
@@ -182,8 +183,8 @@
 			[NSThread sleepForTimeInterval:delay];
 			
 			dispatch_sync(dispatch_get_main_queue(), ^{
-				[items setColorOfTower:i to:[UIColor greenColor]];
-				[items setColorOfTower:i+1 to:[UIColor greenColor]];
+				[items colorSortedTower:i];
+				[items colorSortedTower:i+1];
 			});
 			
 			if([items compare:i to:i+1] > 0){
@@ -191,8 +192,8 @@
 				
 				[NSThread sleepForTimeInterval:delay];
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					[items setColorOfTower:i to:[UIColor redColor]];
-					[items setColorOfTower:i+1 to:[UIColor redColor]];
+					[items colorComparedTower:i];
+					[items colorComparedTower:i+1];
 				});
 				
 				[self playSum:[items sumOf:i and:i+1]];
@@ -203,7 +204,6 @@
 					[items resetColorOfTower:i];
 					[items resetColorOfTower:i+1];
 					[items regenerateTowersInto:self];
-					
 				});
 				
 			}//end if
@@ -225,12 +225,14 @@
 		NSInteger pivot = (arc4random() % (high-low)) + low;
 		NSInteger left = low;
 		NSInteger right = high;
-		dispatch_sync(dispatch_get_main_queue(), ^{[items setColorOfTower:pivot to:[UIColor greenColor]];});
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items colorSortedTower:pivot];
+		});
 
 		while(left <= right){
 			dispatch_sync(dispatch_get_main_queue(), ^{
-				[items setColorOfTower:left to:[UIColor redColor]];
-				[items setColorOfTower:right to:[UIColor redColor]];
+				[items colorComparedTower:left];
+				[items colorComparedTower:right];
 			});
 
 			while([a compare:left to:pivot] < 0)
@@ -240,8 +242,8 @@
 			
 			if(left <= right){
 				dispatch_sync(dispatch_get_main_queue(), ^{
-					[items setColorOfTower:left to:[UIColor greenColor]];
-					[items setColorOfTower:right to:[UIColor greenColor]];
+					[items colorSortedTower:left];
+					[items colorSortedTower:right];
 				});
 				
 				[self playSum:[items sumOf:left and:right]];

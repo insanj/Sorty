@@ -9,13 +9,12 @@
 #import "SRSortingArray.h"
 
 @implementation SRSortingArray
-@synthesize towerColor;
+@synthesize plain, compared, sorted;
 
 -(instancetype)initWithArray:(NSArray *)array{
 	if((self = [super init])){
 		numbers = [[NSMutableArray alloc] initWithArray:array];
 		towers = [[NSMutableArray alloc] initWithCapacity:numbers.count];
-		towerColor = [UIColor purpleColor];
 
 		minVal = NSIntegerMax, maxVal = NSIntegerMin;
 		for(NSNumber *n in array){
@@ -51,19 +50,23 @@
 	[towers exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
 }//end method
 
--(void)resetColorOfTower:(NSUInteger)index{
-	[towers[index] setBackgroundColor:towerColor];
+-(void)resetColorOfTower:(NSInteger)index{
+	[towers[index] setBackgroundColor:plain];
 }
 
--(void)setColorOfTower:(NSUInteger)index to:(UIColor *)color{
-	[towers[index] setBackgroundColor:color?color:towerColor];
-}//end method
+-(void)colorComparedTower:(NSInteger)index{
+	[towers[index] setBackgroundColor:compared];
+}
+
+-(void)colorSortedTower:(NSInteger)index{
+	[towers[index] setBackgroundColor:sorted];
+}
 
 -(void)generateTowersInFrame:(CGRect)frame{
 	for(int i = 0; i < numbers.count; i++){
 		NSInteger height = ceilf(2 + ((((NSNumber *)numbers[i]).intValue - minVal) * ((frame.size.height - 2)/(maxVal - minVal))));
 		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (frame.size.width / numbers.count)), frame.size.height - height, ceilf(frame.size.width / numbers.count), height)];
-		tower.backgroundColor = towerColor;
+		tower.backgroundColor = plain;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[towers addObject:tower];
 	}//end for
@@ -73,7 +76,7 @@
 	for(int i = 0; i < numbers.count; i++){
 		NSInteger height = ceilf(2 + ((((NSNumber *)numbers[i]).intValue - minVal) * ((view.frame.size.height - 2)/(maxVal - minVal))));
 		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (view.frame.size.width / numbers.count)), view.frame.size.height - height, ceilf(view.frame.size.width / numbers.count), height)];
-		tower.backgroundColor = towerColor;
+		tower.backgroundColor = plain;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[towers addObject:tower];
 		[view addSubview:tower];
@@ -93,7 +96,7 @@
 		
 		NSInteger height = ceilf(2 + ((((NSNumber *)numbers[i]).intValue - minVal) * ((view.frame.size.height - 2)/(maxVal - minVal))));
 		UIView *tower = [[UIView alloc] initWithFrame:CGRectMake(ceilf(i * (view.frame.size.width / numbers.count)), view.frame.size.height - height, ceilf(view.frame.size.width / numbers.count), height)];
-		tower.backgroundColor = towerColor;
+		tower.backgroundColor = plain;
 		tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[towers replaceObjectAtIndex:i withObject:tower];
 		
