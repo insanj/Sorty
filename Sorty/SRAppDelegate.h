@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SRMasterViewController.h"
+#define isiOS7 [[UIDevice currentDevice].systemVersion floatValue]>=7.0
 
 @interface SRAppDelegate : UIResponder <UIApplicationDelegate>
 

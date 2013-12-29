@@ -28,16 +28,23 @@
 	
 	if([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad){
 		UINavigationBar *navigationBar = self.navigationController.navigationBar;
-		CGRect titleBarFrame = [detailItem boundingRectWithSize:navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];		
-		UIButton *titleButton = [[UIButton alloc] initWithFrame:titleBarFrame];
-		titleButton.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
-		[titleButton setTitle:detailItem forState:UIControlStateNormal];
-		[titleButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-		[titleButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
-		[titleButton addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchUpInside];
-		self.navigationItem.titleView = titleButton;
 		
-		sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
+		if(isiOS7){
+			CGRect titleBarFrame = [detailItem boundingRectWithSize:navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
+			UIButton *titleButton = [[UIButton alloc] initWithFrame:titleBarFrame];
+			titleButton.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
+			[titleButton setTitle:detailItem forState:UIControlStateNormal];
+			[titleButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+			[titleButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+			[titleButton addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchUpInside];
+			self.navigationItem.titleView = titleButton;
+		}
+		
+		else
+			self.title = detailItem;
+		
+		CGRect fullFrame = isiOS7?self.view.frame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+		sortingView = [[SRSortingView alloc] initWithFrame:fullFrame];
 		sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 		sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		[self.view addSubview:sortingView];
@@ -93,8 +100,7 @@
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
-	sortingView.soundsEnabled = NO;
-	[sortingView.sortThread cancel];
+	[sortingView die];
 	
 	if(self.navigationController.navigationBar.hidden){
 		CGRect downFrame = self.navigationController.navigationBar.frame;

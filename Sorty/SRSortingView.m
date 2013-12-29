@@ -219,12 +219,10 @@
 	});
 	
 	for(int i = 0; i < items.count-1; i++){
-		[NSThread sleepForTimeInterval:delay];
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			[items colorSortedTower:i+1];
+			[self playSum:[items sumOf:i and:i+1]];
 		});
-		
-		[self playSum:[items sumOf:i and:i+1]];
 	}
 }
 
@@ -280,5 +278,13 @@
 	if(soundsEnabled)
 		[gen play:(freq * freqCoeff) length:soundDelay];
 }//end method
+
+#pragma mark - graveyard
+
+-(void)die{
+	soundsEnabled = NO;
+	sortThread = nil;
+	items = nil;
+}
 
 @end

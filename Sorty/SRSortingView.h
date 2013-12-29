@@ -23,4 +23,5 @@
 @property (nonatomic, retain) NSThread *sortThread;
 
 -(void)sort:(NSArray *)given kind:(NSString *)kind;
+-(void)die;
 @end

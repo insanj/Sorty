@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SRDetailViewController.h"
+#import "SRAppDelegate.h"
 
 @class SRDetailViewController;
 @interface SRMasterViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>{

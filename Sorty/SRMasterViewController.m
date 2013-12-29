@@ -14,6 +14,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 #pragma mark - view cycle
 -(void)viewDidLoad{
 	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Centrifuge Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort", @"Stooge Sort"].mutableCopy;
+
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50.f forKey:@"SRItems"];
 
@@ -27,20 +28,26 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 	NSString *name = [build isEqualToString:@"1"]?@"Sorty":[NSString stringWithFormat:@"Sorty (%@)", build];
 	
-	CGRect titleBarFrame = [name boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
-	UIButton *title = [[UIButton alloc] initWithFrame:titleBarFrame];
-	title.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
-	[title setTitle:name forState:UIControlStateNormal];
-	[title setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-	self.navigationItem.titleView = title;
-	self.title = @"";
+	if(isiOS7){
+		self.title = @"";
+		CGRect titleBarFrame = [name boundingRectWithSize:self.navigationController.navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
+		UIButton *title = [[UIButton alloc] initWithFrame:titleBarFrame];
+		title.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
+		[title setTitle:name forState:UIControlStateNormal];
+		[title setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+		self.navigationItem.titleView = title;
+	}
+	
+	else
+		self.title = @"Sorty";
 
 	self.detailViewController = (SRDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 	self.tableView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
 
-	self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:237/255.f green:243/255.f blue:254/255.f alpha:1.0];
+	if(isiOS7)
+		self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:237/255.f green:243/255.f blue:254/255.f alpha:1.0];
 	self.clearsSelectionOnViewWillAppear = YES;
 }//end method
 
@@ -87,7 +94,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-	return indexPath.section==2?[aboutText boundingRectWithSize:CGSizeMake(self.view.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16.f]} context:nil].size.height:50.f;
+	return indexPath.section==2?isiOS7?[aboutText boundingRectWithSize:CGSizeMake(self.view.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16.f]} context:nil].size.height:[aboutText sizeWithFont:[UIFont systemFontOfSize:16.f] constrainedToSize:CGSizeMake(self.view.frame.size.width, CGFLOAT_MAX)].height:50.f;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -118,7 +125,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		}
 		
 		else{
-			cell.textLabel.textAlignment = NSTextAlignmentNatural;
 			cell.textLabel.numberOfLines = 0;
 			cell.textLabel.font = [UIFont systemFontOfSize:14.f];
 			cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
@@ -181,7 +187,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 		else if(indexPath.row == 3){
 			UISlider *freq = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, cell.frame.size.width/3, 50)];
 			freq.center =  CGPointMake(freq.center.x, cell.center.y + 2);
-			freq.minimumValue = 5;
+			freq.minimumValue = 1;
 			freq.maximumValue = 60;
 			[freq addTarget:self action:@selector(changedFreq:) forControlEvents:UIControlEventValueChanged];
 			[freq setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"]];
@@ -212,9 +218,11 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
     back.backgroundColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:225/255.f alpha:1.0];
     cell.selectedBackgroundView = back;
 	
-	if(indexPath.section ==1){
-		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Quick Sort"] containsObject:cell.textLabel.text])
+	if(indexPath.section == 1){
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Quick Sort"] containsObject:cell.textLabel.text]){
 			cell.textLabel.textColor = [UIColor blackColor];
+			[cell setUserInteractionEnabled:YES];
+		}
 		
 		else{
 			cell.textLabel.textColor = [UIColor lightGrayColor];
