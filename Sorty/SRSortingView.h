@@ -8,18 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "SRToneGenerator.h"
+#import "SRSortingArray.h"
 
 @interface SRSortingView : UIView {
-	NSMutableArray *array, *towers;
+	SRSortingArray *items;
 	NSInteger minVal, maxVal;
 	CGFloat soundDelay, freqCoeff;
 	SRToneGenerator *gen;
 }
 
-@property (nonatomic, retain) UIColor *towerColor;
 @property (nonatomic, readwrite) NSTimeInterval delay;
 @property (nonatomic, readwrite) BOOL soundsEnabled;
-
 @property (nonatomic, retain) NSThread *sortThread;
 
 -(void)sort:(NSArray *)given kind:(NSString *)kind;

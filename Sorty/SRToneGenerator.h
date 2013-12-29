@@ -22,7 +22,6 @@
     double theta;
 }
 
--(SRToneGenerator *)init;
 -(id)initWithFrequency:(double)hertz amplitude:(double)volume;
 -(AudioComponentInstance)createToneUnitWithFreq:(float)freq;
 -(void)play:(float)freq;

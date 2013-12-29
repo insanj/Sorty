@@ -42,7 +42,7 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 @implementation SRToneGenerator
 
 #pragma mark - initializations
--(SRToneGenerator *)init{
+-(instancetype)init{
 	if((self = [super init]))
 		units = [[NSMutableArray alloc] init];
     return [self initWithFrequency:44100.0f amplitude:1.0];

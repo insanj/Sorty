@@ -24,6 +24,7 @@
 		9E7E4EA5186D27A60050AFD1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E7E4EA3186D27A60050AFD1 /* InfoPlist.strings */; };
 		9E7E4EA7186D27A60050AFD1 /* SortyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4EA6186D27A60050AFD1 /* SortyTests.m */; };
 		9E7E4EB5186D414F0050AFD1 /* SRSortingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E4EB4186D414F0050AFD1 /* SRSortingView.m */; };
+		9EB3D046186F90010031FE4E /* SRSortingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB3D045186F90010031FE4E /* SRSortingArray.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		9E7E4EB3186D414F0050AFD1 /* SRSortingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSortingView.h; sourceTree = "<group>"; };
 		9E7E4EB4186D414F0050AFD1 /* SRSortingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSortingView.m; sourceTree = "<group>"; };
 		9E7E4EB9186D89B10050AFD1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9EB3D044186F90010031FE4E /* SRSortingArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSortingArray.h; sourceTree = "<group>"; };
+		9EB3D045186F90010031FE4E /* SRSortingArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSortingArray.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 				9E7E4E91186D27A60050AFD1 /* SRDetailViewController.m */,
 				9E7E4EB3186D414F0050AFD1 /* SRSortingView.h */,
 				9E7E4EB4186D414F0050AFD1 /* SRSortingView.m */,
+				9EB3D044186F90010031FE4E /* SRSortingArray.h */,
+				9EB3D045186F90010031FE4E /* SRSortingArray.m */,
 				9E2EF390186E204000EDB434 /* SRToneGenerator.h */,
 				9E2EF391186E204000EDB434 /* SRToneGenerator.m */,
 				9E7E4E93186D27A60050AFD1 /* Images.xcassets */,
@@ -278,6 +283,7 @@
 				9E2EF392186E204000EDB434 /* SRToneGenerator.m in Sources */,
 				9E7E4E92186D27A60050AFD1 /* SRDetailViewController.m in Sources */,
 				9E7E4E86186D27A60050AFD1 /* SRAppDelegate.m in Sources */,
+				9EB3D046186F90010031FE4E /* SRSortingArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

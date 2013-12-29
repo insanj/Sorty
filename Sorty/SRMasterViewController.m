@@ -44,10 +44,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	self.clearsSelectionOnViewWillAppear = YES;
 }//end method
 
--(void)didReceiveMemoryWarning{
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - options config
 -(void)switchSounds:(UISwitch *)sender{
 	[[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:@"SRSounds"];
@@ -68,8 +64,6 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 	[[NSUserDefaults standardUserDefaults] setFloat:sender.value forKey:@"SRFreq"];
 	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]].detailTextLabel.text = @(sender.value).stringValue;
 }
-
-
 
 #pragma mark - table view
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -156,7 +150,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 			UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, width, 50)];
 			delay.center =  CGPointMake(delay.center.x, cell.center.y + 2);
 			delay.minimumValue = 0.f;
-			delay.maximumValue = 1.f;
+			delay.maximumValue = 0.5f;
 			[delay addTarget:self action:@selector(changedDelay:) forControlEvents:UIControlEventValueChanged];
 			[delay setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"]];
 			delay.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
