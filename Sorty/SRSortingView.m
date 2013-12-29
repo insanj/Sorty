@@ -39,20 +39,19 @@
 	soundDelay = delay>0.05f?delay:0.05f;
 	freqCoeff = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"];
 	
-	if([name isEqualToString:@"Bubble Sort"]){
+	if([name isEqualToString:@"Bubble Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(bubbleSort) object:nil];
-		[sortThread start];
-	}
 	
-	else if([name isEqualToString:@"Cocktail Shaker Sort"]){
+	else if([name isEqualToString:@"Cocktail Shaker Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(cocktailSort) object:nil];
-		[sortThread start];
-	}
 	
-	else if([name isEqualToString:@"Quick Sort"]){
+	else if([name isEqualToString:@"Insertion Sort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(insertionSort) object:nil];
+	
+	else if([name isEqualToString:@"Quick Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
-		[sortThread start];
-	}
+	
+	[sortThread start];
 }//end if
 
 #pragma mark - sorts
@@ -211,6 +210,39 @@
 	for(int i = 0; i < items.count-1; i++)
 		[self playSum:[items sumOf:i and:i+1]];
 }//end method
+
+-(void)insertionSort{
+	for(int i = 0; i < items.count; i++){
+		[NSThread sleepForTimeInterval:delay];
+		int value = [items objectAtIndex:i].intValue;
+		
+		int j = i-1;
+		for( ; j >= 0 && [items objectAtIndex:j].intValue > value; j--){
+			[NSThread sleepForTimeInterval:delay];
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items colorComparedTower:j];
+				[items colorComparedTower:j+1];
+			});
+			
+			[items colorComparedTower:j];
+			[items colorComparedTower:j+1];
+			
+			[self playSum:[items sumOf:j and:j+1]];
+			[items exchangeObjectAtIndex:j withObjectAtIndex:j+1];
+		}
+		
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items regenerateTowersInto:self];
+			[items colorSortedTower:j+1];
+		});
+	}
+	
+	[items colorSortedTower:0];
+	for(int i = 1; i < items.count; i++){
+		[items colorSortedTower:i];
+		[self playSum:[items sumOf:i-1 and:i]];
+	}
+}
 
 -(void)quickSort{
 	[self quickSort:items low:0 high:(NSInteger)items.count-1];

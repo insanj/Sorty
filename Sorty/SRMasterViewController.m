@@ -13,7 +13,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 
 #pragma mark - view cycle
 -(void)viewDidLoad{
-	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Centrifuge Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort", @"Stooge Sort"].mutableCopy;
+	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Centrifuge Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort", @"Shell Sort", @"Stooge Sort"].mutableCopy;
 
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50.f forKey:@"SRItems"];
@@ -154,7 +154,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
 			UISlider *delay = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, width, 50)];
 			delay.center =  CGPointMake(delay.center.x, cell.center.y + 2);
 			delay.minimumValue = 0.f;
-			delay.maximumValue = 0.5f;
+			delay.maximumValue = 0.15f;
 			[delay addTarget:self action:@selector(changedDelay:) forControlEvents:UIControlEventValueChanged];
 			[delay setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"]];
 			delay.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -219,7 +219,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
     cell.selectedBackgroundView = back;
 	
 	if(indexPath.section == 1){
-		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Quick Sort"] containsObject:cell.textLabel.text]){
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Insertion Sort", @"Shell Sort", @"Quick Sort"] containsObject:cell.textLabel.text]){
 			cell.textLabel.textColor = [UIColor blackColor];
 			[cell setUserInteractionEnabled:YES];
 		}
