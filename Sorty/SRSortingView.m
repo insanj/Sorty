@@ -44,15 +44,15 @@
 	
 	else if([name isEqualToString:@"Cocktail Shaker Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(cocktailSort) object:nil];
-	
-	else if([name isEqualToString:@"Drain Sort"])
-		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(drainSort) object:nil];
-	
+		
 	else if([name isEqualToString:@"Insertion Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(insertionSort) object:nil];
 	
 	else if([name isEqualToString:@"Quicksort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
+
+	else if([name isEqualToString:@"Selection Sort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(selectionSort) object:nil];
 
 	else if([name isEqualToString:@"Shell Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(shellSort) object:nil];
@@ -241,13 +241,9 @@
 			[items regenerateTowersInto:self];
 			[items colorSortedTower:j+1];
 		});
-	}
+	}//end for
 	
-	[items colorSortedTower:0];
-	for(int i = 1; i < items.count; i++){
-		[items colorSortedTower:i];
-		[self playSum:[items sumOf:i-1 and:i]];
-	}
+	[self playAscension];
 }//end cocktail
 
 -(void)sinkSort{
@@ -256,16 +252,7 @@
 
 -(void)quickSort{
 	[self quickSort:items low:0 high:(NSInteger)items.count-1];
-	dispatch_sync(dispatch_get_main_queue(), ^{
-		[items colorSortedTower:0];
-	});
-	
-	for(int i = 0; i < items.count-1; i++){
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			[items colorSortedTower:i+1];
-			[self playSum:[items sumOf:i and:i+1]];
-		});
-	}
+	[self playAscension];
 }//end qs1
 
 -(void)quickSort:(SRSortingArray *)a low:(NSInteger)first high:(NSInteger)last{
@@ -314,6 +301,40 @@
 	[self quickSort:a low:left high:last];
 }//end qs2
 
+-(void)selectionSort{
+	for(int i = 0; i < [items count] - 1; i++){
+		int min = MAXFLOAT;
+		int minindex = i + 1;
+
+		for(int k = i; k < [items count]; k++){
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items colorComparedTower:k];
+			});
+			
+			if([items objectAtIndex:k].intValue < min){
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items colorComparedTower:minindex];
+					[items regenerateTowersInto:self];
+				});
+				
+				minindex = k;
+				min = [items objectAtIndex:k].intValue;
+			}
+		}//end for
+		
+		[self playSum:[items sumOf:i and:minindex]];
+		[items exchangeObjectAtIndex:i withObjectAtIndex:minindex];
+		
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items regenerateTowersInto:self];
+			[items colorSortedTower:minindex];
+		});
+		
+	}//end for
+	
+	[self playAscension];
+}//end selection
+
 -(void)shellSort{
 	int increment = (int)[items count]/2;
 	while(increment > 0){
@@ -348,13 +369,7 @@
 			increment *= (5.0 / 11);
 	}//end while
 	
-	for(int i = 1; i < items.count; i++){
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			[items colorSortedTower:i-1];
-		});
-		
-		[self playSum:[items sumOf:i-1 and:i]];
-	}
+	[self playAscension];
 }//end shell
 
 #pragma mark - sounds and towers
@@ -363,6 +378,17 @@
 	if(soundsEnabled)
 		[gen play:(freq * freqCoeff) length:soundDelay];
 }//end method
+
+
+-(void)playAscension{
+	[items colorSortedTower:0];
+	for(int i = 0; i < items.count-1; i++){
+		[self playSum:[items sumOf:i and:i+1]];
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items colorSortedTower:i+1];
+		});
+	}
+}
 
 #pragma mark - graveyard
 

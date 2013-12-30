@@ -62,7 +62,7 @@
 
 -(void)changedItems:(UISlider *)sender{
 	[[NSUserDefaults standardUserDefaults] setFloat:sender.value forKey:@"SRItems"];
-	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = @((int)sender.value).stringValue;
+	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = [@((int)sender.value).stringValue stringByAppendingString:@" randoms"];
 }
 
 -(void)changedFreq:(UISlider *)sender{
@@ -185,7 +185,7 @@
 				[cell addSubview:items];
 			
 			cell.textLabel.text = @"Items";
-			cell.detailTextLabel.text = @((int)items.value).stringValue;
+			cell.detailTextLabel.text = [@((int)items.value).stringValue stringByAppendingString:@" randoms"];
 		}
 		
 		else if(indexPath.row == 3){
@@ -223,7 +223,7 @@
     cell.selectedBackgroundView = back;
 	
 	if(indexPath.section == 1){
-		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Insertion Sort", @"Shell Sort", @"Quicksort"] containsObject:cell.textLabel.text]){
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Insertion Sort", @"Selection Sort", @"Shell Sort", @"Quicksort"] containsObject:cell.textLabel.text]){
 			cell.textLabel.textColor = [UIColor blackColor];
 			[cell setUserInteractionEnabled:YES];
 		}
