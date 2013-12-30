@@ -206,7 +206,7 @@
 			UISlider *freq = [[UISlider alloc] initWithFrame:CGRectMake(cell.frame.size.width - width - 25, 0, cell.frame.size.width/3, 50)];
 			freq.center =  CGPointMake(freq.center.x, cell.center.y + 2);
 			freq.minimumValue = 1;
-			freq.maximumValue = 60;
+			freq.maximumValue = 10;
 			[freq addTarget:self action:@selector(changedFreq:) forControlEvents:UIControlEventValueChanged];
 			[freq setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"]];
 			freq.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;

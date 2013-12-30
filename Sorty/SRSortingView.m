@@ -14,10 +14,7 @@
 #pragma mark - initializations
 
 -(instancetype)initWithFrame:(CGRect)frame{
-    if((self = [super initWithFrame:frame]))
-		gen = [[SRToneGenerator alloc] initWithAmplitude:1];
-	
-    return self;
+    return (self = [super initWithFrame:frame]);
 }//end method
 
 -(void)sort:(NSArray *)given kind:(NSString *)name{
@@ -418,8 +415,10 @@
 #pragma mark - sounds and towers
 
 -(void)playSum:(CGFloat)freq{
-	if(soundsEnabled)
-		[gen play:(freq * freqCoeff) length:soundDelay];
+	if(soundsEnabled){
+		SRToneGenerator *gen = [[SRToneGenerator alloc] initWithFrequency:(fmod(550, freq) + 150)*freqCoeff];
+		[gen playForLength:soundDelay];
+	}
 }//end method
 
 

@@ -16,14 +16,19 @@ OSStatus RenderTone(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, c
 
 	SRToneGenerator *toneGenerator = (__bridge SRToneGenerator *)inRefCon;
 	CGFloat theta = toneGenerator->theta;
-	CGFloat amplitude = toneGenerator->amplitude;
 	CGFloat theta_increment = 2 * M_PI * toneGenerator->frequency / toneGenerator->sampleRate;
     
 	const int channel = 0;
 	Float32 *buffer = (Float32 *)ioData->mBuffers[channel].mData;
 	
+	CGFloat amp = 0.f;
 	for(UInt32 frame = 0; frame < inNumberFrames; frame++){
-		buffer[frame] = sinf(theta) * amplitude;
+		if(frame < inNumberFrames/2)
+			amp += 0.008;
+		else
+			amp -= 0.008;
+		
+		buffer[frame] = sinf(theta) * amp;
 	
 		theta += theta_increment;
 		if(theta >= (2 * M_PI))
@@ -42,18 +47,15 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 @implementation SRToneGenerator
 
 #pragma mark - initializations
--(instancetype)init{
-	if((self = [super init]))
-		units = [[NSMutableArray alloc] init];
-    return [self initWithAmplitude:1.0];
-}
 
--(id)initWithAmplitude:(CGFloat)volume{
+-(instancetype)initWithFrequency:(CGFloat)freq{
     if((self = [super init])){
-		frequency = 0.f;
-        amplitude = volume;
-        sampleRate = 44100.0f;
+		frequency = freq;
+        amplitude = 1.f;
+        sampleRate = 44100.f;
 		theta = 0.f;
+		
+		toneUnit = [self createToneUnitWithFreq:freq];
 	}//end if
     
     return self;
@@ -61,7 +63,7 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 
 #pragma mark - tone unit creation
 -(AudioComponentInstance)createToneUnitWithFreq:(CGFloat)freq{
-	AudioComponentInstance toneUnit;
+	AudioComponentInstance audioInstance;
 	AudioComponentDescription defaultOutputDescription;
 	defaultOutputDescription.componentType = kAudioUnitType_Output;
 	defaultOutputDescription.componentSubType = kAudioUnitSubType_RemoteIO;
@@ -70,12 +72,12 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 	defaultOutputDescription.componentFlagsMask = 0;
 	
 	AudioComponent defaultOutput = AudioComponentFindNext(NULL, &defaultOutputDescription);
-	OSErr err = AudioComponentInstanceNew(defaultOutput, &toneUnit);
+	OSErr err = AudioComponentInstanceNew(defaultOutput, &audioInstance);
 	
 	AURenderCallbackStruct input;
 	input.inputProc = RenderTone;
 	input.inputProcRefCon = (__bridge void *)(self);
-	err = AudioUnitSetProperty(toneUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &input, sizeof(input));
+	err = AudioUnitSetProperty(audioInstance, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &input, sizeof(input));
 	
 	const int four_bytes_per_float = 4;
 	const int eight_bits_per_byte = 8;
@@ -88,34 +90,29 @@ void ToneInterruptionListener(void *inClientData, UInt32 inInterruptionState){
 	streamFormat.mBytesPerFrame = four_bytes_per_float;
 	streamFormat.mChannelsPerFrame = 1;
 	streamFormat.mBitsPerChannel = four_bytes_per_float * eight_bits_per_byte;
-	err = AudioUnitSetProperty(toneUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
+	err = AudioUnitSetProperty(audioInstance, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
 
-	return toneUnit;
+	AudioUnitInitialize(audioInstance);
+	return audioInstance;
 }//end method
 
 #pragma mark - playing and stopping
--(void)play:(CGFloat)freq{
-	frequency = freq;
-	AudioComponentInstance toneUnit = [self createToneUnitWithFreq:freq];
-	AudioUnitInitialize(toneUnit);
-	AudioOutputUnitStart(toneUnit);
-}//end method
 
--(void)play:(CGFloat)freq length:(CGFloat)time{
-	frequency = freq;
-	AudioComponentInstance toneUnit = [self createToneUnitWithFreq:freq];
-	AudioUnitInitialize(toneUnit);
+-(void)playForLength:(CGFloat)time{
 	AudioOutputUnitStart(toneUnit);
 
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
-		AudioOutputUnitStop(toneUnit);
-		AudioUnitUninitialize(toneUnit);
-		AudioComponentInstanceDispose(toneUnit);
+		[self stop];
 	});
 }//end method
 
 -(void)stop{
-	NSLog(@"wants to stop!");
+	AudioOutputUnitStop(toneUnit);
+}
+
+-(void)dealloc{
+	AudioUnitUninitialize(toneUnit);
+	AudioComponentInstanceDispose(toneUnit);
 }
 
 @end

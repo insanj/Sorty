@@ -13,7 +13,7 @@
 #import <AudioUnit/AudioUnit.h>
 
 @interface SRToneGenerator : NSObject{
-	NSMutableArray *units;
+	AudioComponentInstance toneUnit;
 	
 @public
 	CGFloat frequency;
@@ -22,9 +22,8 @@
     CGFloat theta;
 }
 
--(id)initWithAmplitude:(CGFloat)volume;
+-(instancetype)initWithFrequency:(CGFloat)freq;
 -(AudioComponentInstance)createToneUnitWithFreq:(CGFloat)freq;
--(void)play:(CGFloat)freq;
--(void)play:(CGFloat)freq length:(CGFloat)time;
+-(void)playForLength:(CGFloat)time;
 -(void)stop;
 @end

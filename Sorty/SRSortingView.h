@@ -15,7 +15,6 @@
 	SRSortingArray *items;
 	NSInteger minVal, maxVal;
 	CGFloat soundDelay, freqCoeff;
-	SRToneGenerator *gen;
 }
 
 @property (nonatomic, readwrite) NSTimeInterval delay;
