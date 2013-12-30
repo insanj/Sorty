@@ -48,6 +48,9 @@
 	else if([name isEqualToString:@"Insertion Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(insertionSort) object:nil];
 	
+	else if([name isEqualToString:@"Shell Sort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(shellSort) object:nil];
+	
 	else if([name isEqualToString:@"Quick Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
 	
@@ -224,9 +227,6 @@
 				[items colorComparedTower:j+1];
 			});
 			
-			[items colorComparedTower:j];
-			[items colorComparedTower:j+1];
-			
 			[self playSum:[items sumOf:j and:j+1]];
 			[items exchangeObjectAtIndex:j withObjectAtIndex:j+1];
 		}
@@ -302,6 +302,49 @@
 	
 	[self quickSort:a low:first high:right];
 	[self quickSort:a low:left high:last];
+}//end method
+
+-(void)shellSort{
+	int increment = (int)[items count]/2;
+	while(increment > 0){
+		[NSThread sleepForTimeInterval:delay];
+
+		for(int i = increment; i < [items count]; i++){
+			int j = i;
+			int temp = [items objectAtIndex:i].intValue;
+			
+			while(j >= increment && [items objectAtIndex:j-increment].intValue > temp){
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items colorComparedTower:i];
+					[items colorComparedTower:j];
+				});
+				
+				[NSThread sleepForTimeInterval:delay];
+				
+				[self playSum:[items sumOf:j and:j-increment]];
+				[items exchangeObjectAtIndex:j withObjectAtIndex:j-increment];
+				j -= increment;
+			}//end while
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items regenerateTowersInto:self];
+				[items colorSortedTower:j];
+			});
+		}//end for
+		
+		if (increment == 2)
+			increment = 1;
+		else
+			increment *= (5.0 / 11);
+	}//end while
+	
+	for(int i = 1; i < items.count; i++){
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items colorSortedTower:i-1];
+		});
+		
+		[self playSum:[items sumOf:i-1 and:i]];
+	}
 }//end method
 
 #pragma mark - sounds and towers

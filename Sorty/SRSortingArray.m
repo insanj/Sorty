@@ -44,6 +44,10 @@
 	return [[numbers objectAtIndex:idx1] intValue] + [[numbers objectAtIndex:idx2] intValue];
 }
 
+-(void)replaceObjectAtIndex:(NSUInteger)index withObject:(NSNumber *)num{
+	[numbers replaceObjectAtIndex:index withObject:num];
+	[towers replaceObjectAtIndex:index withObject:towers[[numbers indexOfObject:num]]];
+}
 
 -(void)exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2{
 	[numbers exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
