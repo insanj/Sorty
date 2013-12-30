@@ -42,15 +42,11 @@
 	
 	NSInteger height = ceilf(2 + ((num.intValue - min) * ((view.frame.size.height - 2)/(max - min))));
 	UIView *tower = [[UIView alloc] initWithFrame:CGRectMake((numbers.count-1) * (view.frame.size.width / count), view.frame.size.height - height, ceilf(view.frame.size.width / count), height)];
-	tower.backgroundColor = grey;
+	tower.backgroundColor = [UIColor colorWithWhite:0.75 alpha:0.5];
 	tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	[towers addObject:tower];
 	
-	dispatch_sync(dispatch_get_main_queue(), ^{
-		[view addSubview:[towers lastObject]];
-	});
-	
-	//NSLog(@"tower: %@ index: %lu count of view: %lu count of towers: %lu", [towers lastObject], [[view subviews] indexOfObject:[towers lastObject]], view.subviews.count, towers.count);
+	[view addSubview:tower];
 }
 
 -(NSNumber *)removeObjectAtIndex:(NSUInteger)index{
@@ -61,6 +57,13 @@
 	[towers removeObjectAtIndex:index];
 	
 	return prev;
+}
+
+-(void)removeAllObjects{
+	[numbers removeAllObjects];
+	for(int i = 0; i < towers.count; i++)
+		[towers[i] removeFromSuperview];
+	[towers removeAllObjects];
 }
 
 -(NSInteger)compare:(NSUInteger)idx1 to:(NSUInteger)idx2{

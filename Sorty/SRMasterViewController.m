@@ -13,7 +13,7 @@
 #pragma mark - view cycle
 
 -(void)viewDidLoad{
-	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort",  @"Drain Sort", @"Heapsort", @"Insertion Sort", @"Library Sort", @"Merge Sort", @"Quicksort", @"Radix Sort", @"Selection Sort", @"Shell Sort", @"Stooge Sort"].mutableCopy;
+	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort",  @"Drain Sort", @"Heapsort", @"Insertion Sort", @"Library Sort", @"Merge Sort", @"Pancake Sort", @"Quicksort", @"Radix Sort (LSD)", @"Selection Sort", @"Shell Sort", @"Stooge Sort"].mutableCopy;
 	aboutText = [NSString stringWithFormat:@"Sorty v%@%@. Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover. Drain Sort created by Julian and Matt Weiss. Tap here to see what I'm up to (and, if you like, follow me on Twitter).", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] isEqualToString:@"1"]?@"":[@" b" stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
 	
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
@@ -237,7 +237,7 @@
     cell.selectedBackgroundView = back;
 	
 	if(indexPath.section == 1){
-		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Drain Sort", @"Insertion Sort", @"Radix Sort", @"Selection Sort", @"Shell Sort", @"Quicksort"] containsObject:cell.textLabel.text]){
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Drain Sort", @"Insertion Sort", @"Radix Sort (LSD)", @"Selection Sort", @"Shell Sort", @"Quicksort"] containsObject:cell.textLabel.text]){
 			cell.textLabel.textColor = [UIColor blackColor];
 			[cell setUserInteractionEnabled:YES];
 		}

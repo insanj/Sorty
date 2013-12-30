@@ -52,8 +52,8 @@
 	else if([name isEqualToString:@"Quicksort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
 	
-	else if([name isEqualToString:@"Radix Sort"])
-		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(radixSort) object:nil];
+	else if([name isEqualToString:@"Radix Sort (LSD)"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(radixSortLSD) object:nil];
 	
 	else if([name isEqualToString:@"Selection Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(selectionSort) object:nil];
@@ -221,11 +221,6 @@
 }//end method
 
 -(void)drainSort{
-	items.grey = UIColorFromRGB(0xd1d0ef);
-/*	UIView *overlay = [[UIView alloc] initWithFrame:self.frame];
-	overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0];
-	[self.superview addSubview:overlay]; */
-	
 	NSInteger maxdex = 0;
 	for(int i = 0; i < [items count]; i++)
 		if([items compare:i to:maxdex] > 0)
@@ -241,8 +236,11 @@
 				[items colorComparedTower:i];
 			});
 			
-			if([items objectAtIndex:i].intValue == 0)
-				[sorted addObject:orig[i] consideringMin:minVal max:maxVal andFinalCount:orig.count inView:self];
+			if([items objectAtIndex:i].intValue == 0){
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[sorted addObject:orig[i] consideringMin:minVal max:maxVal andFinalCount:orig.count inView:self];
+				});
+			}//end if
 			
 			[self playSum:i];
 			[items changeValueOfIndex:i toNewValue:@([items objectAtIndex:i].intValue - 1)];
@@ -253,24 +251,18 @@
 		}//end for
 	}//end while
 	
-	/*for(int i = 0; i < [sorted count]; i++){
-		[items changeValueOfIndex:i toNewValue:orig[[sorted objectAtIndex:i].intValue]];
-		
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			[items colorSortedTower:i];
-			[items regenerateTowersInto:self];
-		});
-	}*/
+	NSArray *finalSorting = [sorted numbersArray];
+	[sorted removeAllObjects];
 	
-	for(int i = 0; i < [sorted count]; i++)
-		[sorted colorSortedTower:i];
+	items = [[SRSortingArray alloc] initWithArray:finalSorting];
+	items.plain = [UIColor colorWithWhite:0.75 alpha:0.5];
+	items.sorted = UIColorFromRGB(0x97fba7);
 	
-	items = sorted;
 	dispatch_sync(dispatch_get_main_queue(), ^{
-		[items regenerateTowersInto:self];
+		[items generateTowersInto:self];
 	});
 	
-	[self playAscension];
+	[self playAscensionOn:items];
 }//end drain
 
 -(void)insertionSort{
@@ -296,7 +288,7 @@
 		});
 	}//end for
 	
-	[self playAscension];
+	[self playAscensionOn:items];
 }//end cocktail
 
 -(void)sinkSort{
@@ -305,7 +297,7 @@
 
 -(void)quickSort{
 	[self quickSort:items low:0 high:(NSInteger)items.count-1];
-	[self playAscension];
+	[self playAscensionOn:items];
 }//end qs1
 
 -(void)quickSort:(SRSortingArray *)a low:(NSInteger)first high:(NSInteger)last{
@@ -354,7 +346,7 @@
 	[self quickSort:a low:left high:last];
 }//end qs2
 
--(void)radixSort{
+-(void)radixSortLSD{
 	
 }//end radix sort
 
@@ -389,7 +381,7 @@
 		
 	}//end for
 	
-	[self playAscension];
+	[self playAscensionOn:items];
 }//end selection
 
 -(void)shellSort{
@@ -426,7 +418,7 @@
 			increment *= (5.0 / 11);
 	}//end while
 	
-	[self playAscension];
+	[self playAscensionOn:items];
 }//end shell
 
 #pragma mark - sounds and towers
@@ -439,20 +431,21 @@
 }//end method
 
 
--(void)playAscension{
-	[items colorSortedTower:0];
+-(void)playAscensionOn:(SRSortingArray *)array{
+	[array colorSortedTower:0];
 	for(int i = 0; i < items.count-1; i++){
-		[self playSum:[items sumOf:i and:i+1]];
+		[self playSum:[array sumOf:i and:i+1]];
 		dispatch_sync(dispatch_get_main_queue(), ^{
-			[items colorSortedTower:i+1];
+			[array colorSortedTower:i+1];
 		});
 	}
-}
+}//end ascension
 
 #pragma mark - graveyard
 
 -(void)die{
 	soundsEnabled = NO;
+	soundDelay = 0.0;
 	sortThread = nil;
 	items = nil;
 }

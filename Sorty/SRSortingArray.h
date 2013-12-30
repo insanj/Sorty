@@ -21,6 +21,7 @@
 -(NSNumber *)objectAtIndex:(NSUInteger)index;
 -(void)addObject:(NSNumber *)num consideringMin:(NSInteger)min max:(NSInteger)max andFinalCount:(NSUInteger)count inView:(UIView *)view;
 -(NSNumber *)removeObjectAtIndex:(NSUInteger)index;
+-(void)removeAllObjects;
 -(NSInteger)compare:(NSUInteger)idx1 to:(NSUInteger)idx2;
 -(NSInteger)sumOf:(NSUInteger)idx1 and:(NSUInteger)idx2;
 -(void)changeValueOfIndex:(NSInteger)index toNewValue:(NSNumber *)num;
