@@ -20,9 +20,10 @@
 -(NSUInteger)count;
 -(NSNumber *)objectAtIndex:(NSUInteger)index;
 -(NSInteger)compare:(NSUInteger)idx1 to:(NSUInteger)idx2;
+-(NSInteger)sumOf:(NSUInteger)idx1 and:(NSUInteger)idx2;
 -(void)replaceObjectAtIndex:(NSUInteger)index withObject:(NSNumber *)num;
 -(void)exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2;
--(NSInteger)sumOf:(NSUInteger)idx1 and:(NSUInteger)idx2;
+-(NSArray *)numbersArray;
 
 //Tower management methods
 -(void)resetColorOfTower:(NSInteger)index;

@@ -29,7 +29,7 @@
 	if([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad){
 		UINavigationBar *navigationBar = self.navigationController.navigationBar;
 		
-		if(isiOS7){
+		if([detailItem respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]){
 			CGRect titleBarFrame = [detailItem boundingRectWithSize:navigationBar.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:18.f]} context:nil];
 			UIButton *titleButton = [[UIButton alloc] initWithFrame:titleBarFrame];
 			titleButton.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:18.f];
@@ -38,13 +38,14 @@
 			[titleButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
 			[titleButton addTarget:self action:@selector(revealBar) forControlEvents:UIControlEventTouchUpInside];
 			self.navigationItem.titleView = titleButton;
+			sortingView = [[SRSortingView alloc] initWithFrame:self.view.frame];
+		}//end if
+		
+		else{
+			self.title = detailItem;
+			sortingView = [[SRSortingView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
 		}
 		
-		else
-			self.title = detailItem;
-		
-		CGRect fullFrame = isiOS7?self.view.frame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-		sortingView = [[SRSortingView alloc] initWithFrame:fullFrame];
 		sortingView.backgroundColor = [UIColor colorWithRed:239/255.f green:239/255.f blue:239/255.f alpha:1.0];
 		sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		[self.view addSubview:sortingView];
@@ -54,7 +55,7 @@
 			[gen addObject:@(arc4random() % imax)];
 		sortingView.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"];
 		[sortingView sort:gen kind:detailItem];
-	}
+	}//end if
 }//end method
 
 #pragma mark - effects

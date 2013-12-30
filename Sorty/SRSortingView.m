@@ -45,14 +45,17 @@
 	else if([name isEqualToString:@"Cocktail Shaker Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(cocktailSort) object:nil];
 	
+	else if([name isEqualToString:@"Drain Sort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(drainSort) object:nil];
+	
 	else if([name isEqualToString:@"Insertion Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(insertionSort) object:nil];
 	
+	else if([name isEqualToString:@"Quicksort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
+
 	else if([name isEqualToString:@"Shell Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(shellSort) object:nil];
-	
-	else if([name isEqualToString:@"Quick Sort"])
-		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
 	
 	[sortThread start];
 }//end if
@@ -95,7 +98,7 @@
 			 }//end if
 		 }//end for
 	 }//end while
- }//end method*/
+ }//end bogo*/
 
 -(void)bubbleSort{
 	BOOL sorted = NO;
@@ -135,8 +138,7 @@
 	
 	for(int i = 1; i < items.count; i++)
 		[self playSum:[items sumOf:i-1 and:i]];
-}//end method
-
+}//end bubble
 
 -(void)cocktailSort{
 	BOOL sorted = NO;
@@ -214,6 +216,10 @@
 		[self playSum:[items sumOf:i and:i+1]];
 }//end method
 
+-(void)drainSort{
+	
+}
+
 -(void)insertionSort{
 	for(int i = 0; i < items.count; i++){
 		[NSThread sleepForTimeInterval:delay];
@@ -242,6 +248,10 @@
 		[items colorSortedTower:i];
 		[self playSum:[items sumOf:i-1 and:i]];
 	}
+}//end cocktail
+
+-(void)sinkSort{
+	
 }
 
 -(void)quickSort{
@@ -256,7 +266,7 @@
 			[self playSum:[items sumOf:i and:i+1]];
 		});
 	}
-}
+}//end qs1
 
 -(void)quickSort:(SRSortingArray *)a low:(NSInteger)first high:(NSInteger)last{
 	[NSThread sleepForTimeInterval:delay];
@@ -302,7 +312,7 @@
 	
 	[self quickSort:a low:first high:right];
 	[self quickSort:a low:left high:last];
-}//end method
+}//end qs2
 
 -(void)shellSort{
 	int increment = (int)[items count]/2;
@@ -345,7 +355,7 @@
 		
 		[self playSum:[items sumOf:i-1 and:i]];
 	}
-}//end method
+}//end shell
 
 #pragma mark - sounds and towers
 

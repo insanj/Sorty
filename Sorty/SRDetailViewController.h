@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "SRSortingView.h"
-#import "SRAppDelegate.h"
 
 @interface SRDetailViewController : UIViewController <UISplitViewControllerDelegate>{
 	UIButton *reveal;

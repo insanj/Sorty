@@ -11,6 +11,7 @@
 @implementation SRSortingArray
 @synthesize plain, compared, sorted;
 
+#pragma mark - augmented creation/management methods
 -(instancetype)initWithArray:(NSArray *)array{
 	if((self = [super init])){
 		numbers = [[NSMutableArray alloc] initWithArray:array];
@@ -52,7 +53,13 @@
 -(void)exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2{
 	[numbers exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
 	[towers exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
-}//end method
+}
+
+-(NSArray *)numbersArray{
+	return numbers.copy;
+}
+
+#pragma mark - tower management methods
 
 -(void)resetColorOfTower:(NSInteger)index{
 	[towers[index] setBackgroundColor:plain];
