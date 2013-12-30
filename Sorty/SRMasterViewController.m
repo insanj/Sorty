@@ -62,7 +62,14 @@
 
 -(void)changedItems:(UISlider *)sender{
 	[[NSUserDefaults standardUserDefaults] setFloat:sender.value forKey:@"SRItems"];
-	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = [@((int)sender.value).stringValue stringByAppendingString:@" randoms"];
+	[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel.text = [@((int)sender.value).stringValue stringByAppendingString:[[NSUserDefaults standardUserDefaults] boolForKey:@"SRRandom"]?@" sequentials":@" randoms"];
+}
+
+-(void)switchRandom{
+	BOOL randomBool = ![[NSUserDefaults standardUserDefaults] boolForKey:@"SRRandom"];
+	[[NSUserDefaults standardUserDefaults] setBool:randomBool  forKey:@"SRRandom"];
+	UILabel *detail = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].detailTextLabel;
+	detail.text = [[detail.text componentsSeparatedByString:@" "][0] stringByAppendingString:randomBool?@" sequentials":@" randoms"];
 }
 
 -(void)changedFreq:(UISlider *)sender{
@@ -185,7 +192,14 @@
 				[cell addSubview:items];
 			
 			cell.textLabel.text = @"Items";
-			cell.detailTextLabel.text = [@((int)items.value).stringValue stringByAppendingString:@" randoms"];
+			cell.detailTextLabel.text = [@((int)items.value).stringValue stringByAppendingString:[[NSUserDefaults standardUserDefaults] boolForKey:@"SRRandom"]?@" sequentials":@" randoms"];
+			
+			UIButton *random = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+			[random addTarget:self action:@selector(switchRandom) forControlEvents:UIControlEventTouchUpInside];
+			random.tag = 4;
+			
+			if(![cell viewWithTag:4])
+				[cell addSubview:random];
 		}
 		
 		else if(indexPath.row == 3){
@@ -196,9 +210,9 @@
 			[freq addTarget:self action:@selector(changedFreq:) forControlEvents:UIControlEventValueChanged];
 			[freq setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"SRFreq"]];
 			freq.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-			freq.tag = 4;
+			freq.tag = 5;
 			
-			if(![cell viewWithTag:4])
+			if(![cell viewWithTag:5])
 				[cell addSubview:freq];
 			
 			cell.textLabel.text = @"Frequency Coeff";

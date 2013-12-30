@@ -50,9 +50,30 @@
 		sortingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		[self.view addSubview:sortingView];
 		
-		NSMutableArray *gen = [NSMutableArray new];
-		for(int i = 0, imax = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"]; i < imax; i++)
-			[gen addObject:@(arc4random() % imax)];
+		NSUInteger size = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"];
+		NSMutableArray *gen = [[NSMutableArray alloc] initWithCapacity:size];
+		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"SRRandom"]){			
+			NSMutableArray *elements = [[NSMutableArray alloc] init];
+			for(int i = 0; i < size; i++){
+				[gen addObject:@(-1)];
+				[elements addObject:@(i)];
+			}
+						
+			int n = 0;
+			for(int i = (arc4random() % size); elements.count > 0; i = (arc4random() % size)){
+				if([elements containsObject:@(i)]){
+					[elements removeObject:@(i)];
+					[gen replaceObjectAtIndex:i withObject:@(n)];
+					n++;
+				}
+			}//end for
+		}//end if
+		
+		else
+			for(int i = 0; i < size; i++)
+				[gen addObject:@(arc4random() % size)];
+		
 		sortingView.delay = [[NSUserDefaults standardUserDefaults] floatForKey:@"SRDelay"];
 		[sortingView sort:gen kind:detailItem];
 	}//end if
