@@ -14,7 +14,8 @@
 #pragma mark - initializations
 
 -(instancetype)initWithFrame:(CGRect)frame{
-    return (self = [super initWithFrame:frame]);
+	self = [super initWithFrame:frame];
+    return self;
 }//end method
 
 -(void)sort:(NSArray *)given kind:(NSString *)name{
@@ -50,7 +51,10 @@
 	
 	else if([name isEqualToString:@"Quicksort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
-
+	
+	else if([name isEqualToString:@"Radix Sort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(radixSort) object:nil];
+	
 	else if([name isEqualToString:@"Selection Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(selectionSort) object:nil];
 
@@ -245,7 +249,6 @@
 			
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[items regenerateTowersInto:self];
-				[sorted resetTowersIntoView:self];
 			});
 		}//end for
 	}//end while
@@ -263,6 +266,9 @@
 		[sorted colorSortedTower:i];
 	
 	items = sorted;
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[items regenerateTowersInto:self];
+	});
 	
 	[self playAscension];
 }//end drain
@@ -347,6 +353,10 @@
 	[self quickSort:a low:first high:right];
 	[self quickSort:a low:left high:last];
 }//end qs2
+
+-(void)radixSort{
+	
+}//end radix sort
 
 -(void)selectionSort{
 	for(int i = 0; i < [items count] - 1; i++){
