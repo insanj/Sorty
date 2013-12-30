@@ -43,7 +43,6 @@
 	NSInteger height = ceilf(2 + ((num.intValue - min) * ((view.frame.size.height - 2)/(max - min))));
 	UIView *tower = [[UIView alloc] initWithFrame:CGRectMake((numbers.count-1) * (view.frame.size.width / count), view.frame.size.height - height, ceilf(view.frame.size.width / count), height)];
 	tower.backgroundColor = grey;
-	tower.hidden = NO;
 	tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	[towers addObject:tower];
 	

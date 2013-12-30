@@ -218,6 +218,9 @@
 
 -(void)drainSort{
 	items.grey = UIColorFromRGB(0xd1d0ef);
+/*	UIView *overlay = [[UIView alloc] initWithFrame:self.frame];
+	overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0];
+	[self.superview addSubview:overlay]; */
 	
 	NSInteger maxdex = 0;
 	for(int i = 0; i < [items count]; i++)
@@ -242,6 +245,7 @@
 			
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[items regenerateTowersInto:self];
+				[sorted resetTowersIntoView:self];
 			});
 		}//end for
 	}//end while
