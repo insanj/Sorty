@@ -45,6 +45,11 @@
 	return [[numbers objectAtIndex:idx1] intValue] + [[numbers objectAtIndex:idx2] intValue];
 }
 
+//requires regeneration
+-(void)changeValueOfIndex:(NSInteger)index toNewValue:(NSNumber *)num{
+	[numbers replaceObjectAtIndex:index withObject:num];
+}
+
 -(void)replaceObjectAtIndex:(NSUInteger)index withObject:(NSNumber *)num{
 	[numbers replaceObjectAtIndex:index withObject:num];
 	[towers replaceObjectAtIndex:index withObject:towers[[numbers indexOfObject:num]]];

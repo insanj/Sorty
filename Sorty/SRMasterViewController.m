@@ -237,7 +237,7 @@
     cell.selectedBackgroundView = back;
 	
 	if(indexPath.section == 1){
-		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Insertion Sort", @"Selection Sort", @"Shell Sort", @"Quicksort"] containsObject:cell.textLabel.text]){
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Drain Sort", @"Insertion Sort", @"Selection Sort", @"Shell Sort", @"Quicksort"] containsObject:cell.textLabel.text]){
 			cell.textLabel.textColor = [UIColor blackColor];
 			[cell setUserInteractionEnabled:YES];
 		}

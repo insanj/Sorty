@@ -45,6 +45,9 @@
 	else if([name isEqualToString:@"Cocktail Shaker Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(cocktailSort) object:nil];
 		
+	else if([name isEqualToString:@"Drain Sort"])
+		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(drainSort) object:nil];
+	
 	else if([name isEqualToString:@"Insertion Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(insertionSort) object:nil];
 	
@@ -217,7 +220,48 @@
 }//end method
 
 -(void)drainSort{
+	NSInteger maxdex = 0;
+	for(int i = 0; i < [items count]; i++)
+		if([items compare:i to:maxdex] > 0)
+			maxdex = i;
 	
+	NSArray *orig = [items numbersArray];
+	NSMutableArray *sortedIndexes = [[NSMutableArray alloc] init];
+	
+	while(sortedIndexes.count != orig.count){
+		for(int i = 0; i < [items count]; i++){
+			[NSThread sleepForTimeInterval:delay];
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items colorComparedTower:i];
+			});
+			
+			if([items objectAtIndex:i].intValue == 0){
+				[sortedIndexes addObject:@(i)];
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[items colorSortedTower:i];
+				});
+			}
+			
+			[self playSum:i];
+			[items changeValueOfIndex:i toNewValue:@([items objectAtIndex:i].intValue - 1)];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[items regenerateTowersInto:self];
+			});
+		}//end for
+	}//end while
+	
+	for(int i = 0; i < sortedIndexes.count; i++){
+		[items changeValueOfIndex:i toNewValue:orig[((NSNumber *)sortedIndexes[i]).intValue]];
+		
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[items colorSortedTower:i];
+			[items regenerateTowersInto:self];
+		});
+		
+	}
+	
+	[self playAscension];
 }
 
 -(void)insertionSort{
