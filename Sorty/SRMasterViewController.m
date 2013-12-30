@@ -12,8 +12,9 @@
 static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover. Tap here to see what I'm up to (and, if you like it, follow me on twitter).";
 
 #pragma mark - view cycle
+
 -(void)viewDidLoad{
-	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Centrifuge Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort", @"Shell Sort", @"Stooge Sort"].mutableCopy;
+	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort", @"Heap Sort", @"Insertion Sort", @"Merge Sort", @"Quick Sort", @"Radix Sort", @"Selection Sort", @"Shell Sort", @"Sink Sort", @"Stooge Sort"].mutableCopy;
 
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50.f forKey:@"SRItems"];
@@ -219,7 +220,7 @@ static NSString *aboutText = @"Created with love by Julian (insanj) Weiss. Sourc
     cell.selectedBackgroundView = back;
 	
 	if(indexPath.section == 1){
-		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Insertion Sort", @"Shell Sort", @"Quick Sort"] containsObject:cell.textLabel.text]){
+		if([@[@"Bubble Sort", @"Cocktail Shaker Sort", @"Insertion Sort", @"Shell Sort", @"Sink Sort", @"Quick Sort"] containsObject:cell.textLabel.text]){
 			cell.textLabel.textColor = [UIColor blackColor];
 			[cell setUserInteractionEnabled:YES];
 		}
