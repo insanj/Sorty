@@ -425,7 +425,7 @@
 
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled){
-		SRToneGenerator *gen = [[SRToneGenerator alloc] initWithFrequency:(fmod(550, freq) + 150)*freqCoeff];
+		SRToneGenerator *gen = [[SRToneGenerator alloc] initWithFrequency:(fmod(350, freq) + 150)*freqCoeff];
 		[gen playForLength:soundDelay];
 	}
 }//end method

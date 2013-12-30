@@ -14,7 +14,7 @@
 
 -(void)viewDidLoad{
 	objects = @[@"Bitonic Sort", @"Bogo Sort", @"Bubble Sort", @"Bucket Sort", @"Cocktail Shaker Sort",  @"Drain Sort", @"Heapsort", @"Insertion Sort", @"Library Sort", @"Merge Sort", @"Pancake Sort", @"Quicksort", @"Radix Sort (LSD)", @"Selection Sort", @"Shell Sort", @"Stooge Sort"].mutableCopy;
-	aboutText = [NSString stringWithFormat:@"Sorty v%@%@. Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover. Drain Sort created by Julian and Matt Weiss. Tap here to see what I'm up to (and, if you like, follow me on Twitter).", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] isEqualToString:@"1"]?@"":[@" b" stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+	aboutText = [NSString stringWithFormat:@"Sorty v%@%@. Created with love by Julian (insanj) Weiss. Source available online. Special thanks to thekirbylover and Aehmlo. Drain Sort created by Julian and Matt Weiss. Tap here to see what I'm up to (and, if you like, follow me on Twitter).", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] isEqualToString:@"1"]?@"":[@" b" stringByAppendingString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
 	
 	if([[NSUserDefaults standardUserDefaults] floatForKey:@"SRItems"] == 0.f)
 		[[NSUserDefaults standardUserDefaults] setFloat:50.f forKey:@"SRItems"];
