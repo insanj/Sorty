@@ -9,7 +9,7 @@
 #import "SRSortingArray.h"
 
 @implementation SRSortingArray
-@synthesize plain, compared, sorted;
+@synthesize plain, compared, sorted, grey;
 
 #pragma mark - augmented creation/management methods
 -(instancetype)initWithArray:(NSArray *)array{
@@ -35,6 +35,33 @@
 
 -(NSNumber *)objectAtIndex:(NSUInteger)index{
 	return [numbers objectAtIndex:index];
+}
+
+-(void)addObject:(NSNumber *)num consideringMin:(NSInteger)min max:(NSInteger)max andFinalCount:(NSUInteger)count inView:(UIView *)view{
+	[numbers addObject:num];
+	
+	NSInteger height = ceilf(2 + ((num.intValue - min) * ((view.frame.size.height - 2)/(max - min))));
+	UIView *tower = [[UIView alloc] initWithFrame:CGRectMake((numbers.count-1) * (view.frame.size.width / count), view.frame.size.height - height, ceilf(view.frame.size.width / count), height)];
+	tower.backgroundColor = grey;
+	tower.hidden = NO;
+	tower.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+	[towers addObject:tower];
+	
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[view addSubview:[towers lastObject]];
+	});
+	
+	//NSLog(@"tower: %@ index: %lu count of view: %lu count of towers: %lu", [towers lastObject], [[view subviews] indexOfObject:[towers lastObject]], view.subviews.count, towers.count);
+}
+
+-(NSNumber *)removeObjectAtIndex:(NSUInteger)index{
+	NSNumber *prev = numbers[index];
+	[numbers removeObjectAtIndex:index];
+	
+	[towers[index] removeFromSuperview];
+	[towers removeObjectAtIndex:index];
+	
+	return prev;
 }
 
 -(NSInteger)compare:(NSUInteger)idx1 to:(NSUInteger)idx2{
@@ -65,6 +92,10 @@
 }
 
 #pragma mark - tower management methods
+-(void)removeTowerFromSuperview:(NSUInteger)index{
+	[numbers removeObjectAtIndex:index];
+	[towers[index] removeFromSuperview];
+}
 
 -(void)resetColorOfTower:(NSInteger)index{
 	[towers[index] setBackgroundColor:plain];
@@ -76,6 +107,10 @@
 
 -(void)colorSortedTower:(NSInteger)index{
 	[towers[index] setBackgroundColor:sorted];
+}
+
+-(void)colorGreyedTower:(NSInteger)index{
+	[towers[index] setBackgroundColor:grey];
 }
 
 -(void)generateTowersInFrame:(CGRect)frame{

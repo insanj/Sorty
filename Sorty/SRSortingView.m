@@ -217,27 +217,25 @@
 }//end method
 
 -(void)drainSort{
+	items.grey = UIColorFromRGB(0xd1d0ef);
+	
 	NSInteger maxdex = 0;
 	for(int i = 0; i < [items count]; i++)
 		if([items compare:i to:maxdex] > 0)
 			maxdex = i;
 	
 	NSArray *orig = [items numbersArray];
-	NSMutableArray *sortedIndexes = [[NSMutableArray alloc] init];
+	SRSortingArray *sorted = [[SRSortingArray alloc] initWithArray:[[NSArray alloc] init]];
 	
-	while(sortedIndexes.count != orig.count){
+	while([sorted count] != orig.count){
 		for(int i = 0; i < [items count]; i++){
 			[NSThread sleepForTimeInterval:delay];
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[items colorComparedTower:i];
 			});
 			
-			if([items objectAtIndex:i].intValue == 0){
-				[sortedIndexes addObject:@(i)];
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					[items colorSortedTower:i];
-				});
-			}
+			if([items objectAtIndex:i].intValue == 0)
+				[sorted addObject:orig[i] consideringMin:minVal max:maxVal andFinalCount:orig.count inView:self];
 			
 			[self playSum:i];
 			[items changeValueOfIndex:i toNewValue:@([items objectAtIndex:i].intValue - 1)];
@@ -248,14 +246,19 @@
 		}//end for
 	}//end while
 	
-	for(int i = 0; i < sortedIndexes.count; i++){
-		[items changeValueOfIndex:i toNewValue:orig[((NSNumber *)sortedIndexes[i]).intValue]];
+	/*for(int i = 0; i < [sorted count]; i++){
+		[items changeValueOfIndex:i toNewValue:orig[[sorted objectAtIndex:i].intValue]];
 		
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			[items colorSortedTower:i];
 			[items regenerateTowersInto:self];
 		});
-	}
+	}*/
+	
+	for(int i = 0; i < [sorted count]; i++)
+		[sorted colorSortedTower:i];
+	
+	items = sorted;
 	
 	[self playAscension];
 }//end drain
