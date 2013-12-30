@@ -258,11 +258,10 @@
 			[items colorSortedTower:i];
 			[items regenerateTowersInto:self];
 		});
-		
 	}
 	
 	[self playAscension];
-}
+}//end drain
 
 -(void)insertionSort{
 	for(int i = 0; i < items.count; i++){
