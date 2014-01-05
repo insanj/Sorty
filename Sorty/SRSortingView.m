@@ -27,6 +27,8 @@
 			minVal = n.intValue;
 	}
 	
+	gens = [[NSMutableArray alloc] init];
+	
 	items = [[SRSortingArray alloc] initWithArray:given];
 	items.plain = UIColorFromRGB(0x8180ef);
 	items.compared = UIColorFromRGB(0xf1787d);
@@ -51,10 +53,7 @@
 	
 	else if([name isEqualToString:@"Quicksort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(quickSort) object:nil];
-	
-	else if([name isEqualToString:@"Radix Sort (LSD)"])
-		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(radixSortLSD) object:nil];
-	
+		
 	else if([name isEqualToString:@"Selection Sort"])
 		sortThread = [[NSThread alloc] initWithTarget:self selector:@selector(selectionSort) object:nil];
 
@@ -291,9 +290,45 @@
 	[self playAscensionOn:items];
 }//end cocktail
 
--(void)sinkSort{
-	
+/*-(void)mergeSort{
+	NSLog(@"%@", NSStringFromRange([self mergeSort:NSMakeRange(0, [items count])]));
 }
+
+-(NSRange)mergeSort:(NSRange)array{
+	if([items count] >= 2){
+		int middle = (int)[items count]/2;
+		NSRange left = NSMakeRange(0, middle);
+		NSRange right = NSMakeRange(middle, ([items count] - middle));
+		return [self merge:[self mergeSort:left] andRight:[self mergeSort:right]];
+	}
+	
+	else
+		return array;
+}//end merge
+
+-(NSRange)merge:(NSRange)leftArray andRight:(NSRange)rightArray{
+	NSMutableArray *result = [[NSMutableArray alloc] init];
+	NSUInteger right = leftArray.location;
+	NSUInteger left = rightArray.location;
+	
+	while(left < (leftArray.location + leftArray.length) && right < (rightArray.location + rightArray.length)){
+		if([items compare:left to:right] < 0)
+			[result addObject:[items objectAtIndex:left++]];
+		else
+			[result addObject:[items objectAtIndex:right++]];
+	}//end while
+
+	NSRange leftRange = NSMakeRange(left, leftArray.length - left);
+	NSRange rightRange = NSMakeRange(right, rightArray.length - right);
+	
+	NSArray *newRight = [rightArr subarrayWithRange:rightRange];
+	NSArray *newLeft = [leftArr subarrayWithRange:leftRange];
+	
+	newLeft = [result arrayByAddingObjectsFromArray:newLeft];
+	return [newLeft arrayByAddingObjectsFromArray:newRight];
+	
+	return NSMakeRange(leftArray.location, rightArray.location + rightArray.length);
+}*/
 
 -(void)quickSort{
 	[self quickSort:items low:0 high:(NSInteger)items.count-1];
@@ -345,10 +380,6 @@
 	[self quickSort:a low:first high:right];
 	[self quickSort:a low:left high:last];
 }//end qs2
-
--(void)radixSortLSD{
-	
-}//end radix sort
 
 -(void)selectionSort{
 	for(int i = 0; i < [items count] - 1; i++){
@@ -426,7 +457,15 @@
 -(void)playSum:(CGFloat)freq{
 	if(soundsEnabled){
 		SRToneGenerator *gen = [[SRToneGenerator alloc] initWithFrequency:(fmod(350, freq) + 150)*freqCoeff];
-		[gen playForLength:soundDelay];
+		[gens addObject:gen];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[gen playForLength:soundDelay];
+		});
+		
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(soundDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
+			[gens removeObject:gen];
+		});
 	}
 }//end method
 
@@ -434,6 +473,7 @@
 -(void)playAscensionOn:(SRSortingArray *)array{
 	[array colorSortedTower:0];
 	for(int i = 0; i < items.count-1; i++){
+		[NSThread sleepForTimeInterval:delay];
 		[self playSum:[array sumOf:i and:i+1]];
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			[array colorSortedTower:i+1];
