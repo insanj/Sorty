@@ -3,8 +3,8 @@ Sorty
 
 Physicalize sorting algorithms on iOS. Inspired by *[15 Sorting Algorithms in 6 Minutes](http://www.youtube.com/watch?v=kPRA0W1kECg)*.
 
-**Quicksort Demonstration in Sorty:**
-![Haifisch's Quicksort Video](example.gif)
+**Quicksort Demonstration in Sorty:** (thanks, [Haifisch](https://github.com/Haifisch)!)
+- ![Haifisch's Quicksort Video](example.gif)
 
 ---------------------------------------
 [Creative Commons Attribution-NonCommercial 3.0 United States License](http://creativecommons.org/licenses/by-nc/3.0/us/) as of 2014:
